@@ -1,0 +1,59 @@
+import {Callout, FileTree} from 'nextra/components'
+import Image from 'next/image'
+
+
+## Cargo - narzędzie do budowania produktu
+
+<Image src="/Cargo-Logo-Small.png" alt="Cargo Logo" width={200} height={200} />
+
+**Cargo** to narzędzie służące do budowania projektów tworzonych w języku Rust. Jest to ustandaryzowane narzędzie dostarczone w dystrybucji środowiska Rust, poza budowanie projektu pozwala na zarządzanie zależnościami, uruchamieniem testów i samego projektu oraz publikowaniem gotowych bibliotek w centralnym repozytorium https://crates.io.
+
+### Pierwszy projekt w Rust
+
+1. Otwórz terminal i wywołaj polecenie:
+    ```copy
+    cargo new hello-world
+    ```
+2. W wyniku operacji zostanie wygenerowana struktura projektu:
+<FileTree>
+<FileTree.Folder name="hello-world" defaultOpen>
+    <FileTree.File name="Cargo.toml" />
+    <FileTree.Folder name="src" defaultOpen>
+    <FileTree.File name="main.rs" />
+    </FileTree.Folder>
+</FileTree.Folder>
+</FileTree>
+
+3. Plik `Cargo.toml` opisuje projekt, zawiera podstawowe informacje dotyczące tworzonego projektu oraz m.in. zależności do wykorzystywanych bibliotek. Twój plik powinien wyglądać podobnie do:
+    ```
+    [package]
+    name = "hello-world"
+    version = "0.1.0"
+    edition = "2021"
+
+    # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+    [dependencies]
+    ```
+4. Kod programu znajduje się pliku `main.rs`:
+    ```rust copy
+    fn main() {
+        println!("hello world");
+    }
+    ```
+5. Skompiluj projekt używając polecenia:
+    ```copy
+    cargo build
+    ```
+6. Uruchom skompilowany program poleceniem:
+    ```copy
+    cargo run
+    ```
+7. Gratulacje - utworzyłaś/eś swój pierwszy projekt w środowisku Rust.
+
+<Callout type="info">
+**Chcesz wiedzieć więcej?**
+
+Więcej na temat narzędzia `cargo` znajdziesz w dokumentacji na stronie: https://doc.rust-lang.org/cargo/
+</Callout>
+

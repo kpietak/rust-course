@@ -1,0 +1,25 @@
+# Ćwiczenia
+
+## Kółko i krzyżyk
+
+Napisz grę kółko i krzyżyk na planszy 3x3. Gra przeznaczona jest dla dwóch graczy, którzy po kolei wprowadzają współprzędnę swojego ruchu. Po wykonaniu każdego ruchu powinna wydrykować się plansza z aktualnym stanem gry oraz prośba o podanie ruchu dla kolejnego gracza.
+
+Program powinien automatycznie wykrywać konfiguracje wygrywającą i wtedy zakończyć grę, wypisując gratulacje dla wygranego gracza. W przypadku remisu, program powinien wypisać stosowną informację i zakończyć działanie.
+
+Utwórz program w nowym projekcie "tictactoe", utworzonym za pomocą narzędzia `cargo`.
+
+Wskazówka: do wczytywania poleceń od użytkownika wykorzystaj następujący kod:
+
+```rust copy
+use std::io;
+
+fn main() {
+    let mut user_input = String::new();
+    let mut cmd : char; // place for the command
+
+    println!("Type your command:");
+    let _ = io::stdin().read_line(&mut user_input); // get string from the user input
+    cmd = user_input.chars().nth(0).unwrap(); // get the first char from the given string
+    
+}
+```

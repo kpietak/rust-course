@@ -1,0 +1,26 @@
+{
+  "name": "rust-course",
+  "version": "0.0.1",
+  "description": "Introduction to programming in Rust",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && next export",
+    "start": "next start"
+  },
+  "author": {
+    "name": "Kamil Piętak",
+    "email": "kpietak@agh.edu.pl"
+  },
+  "dependencies": {
+    "next": "^13.5.6",
+    "nextra": "2.13.2",
+    "nextra-theme-docs": "2.13.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "18.11.10",
+    "@types/react": "18.2.57",
+    "typescript": "^4.9.3"
+  }
+}

@@ -1,0 +1,163 @@
+import {Callout} from 'nextra/components'
+
+# Sterowanie przepływem
+
+## Instrukcje i wyrażenia
+
+<Callout type="default">
+Czym różni się instrukcja od wyrażenia?
+</Callout>
+
+### Kod bloku jako wyrażenie
+
+```rust copy showLineNumbers {5}
+fn main() {
+    
+    let y = {
+        let x = 3;
+        x + 1
+    }
+
+    println!("The value of y is {}", y);
+}
+```
+
+<Callout type="info">
+Wyrażenie nie mają na końcu średnika (patrz linia 5 w powyższym fragmencie kodu). Jeśli po wyrażeniu dodamy średnik, to zmieniamy je w instrukcję, która nie zwróci wartości.
+</Callout>
+
+
+## Wyrażenie warunkowe
+
+1. Instrukcja `if`:
+    ```rust copy
+    let i = 1;
+    if i > 0 { 
+        println!("Non-negative number")
+    }
+    ```
+
+1. Wyrażenie `if/else`
+    ```rust copy
+    let i = -1;
+    if i > 0 { 
+        println!("Non-negative number");
+    } else {
+        println!("Negative number");
+    }
+    ```
+
+1. Określ typ wartości zwracanej przez `if/else` w poniższym przypadku:
+    ```rust copy
+    let i = -1;
+    let abs_i = if i > 0 { i } else { -i}; // Jaki jest typ abs_i?
+    println!("{}", abs_i)
+    ```
+
+1. Określ typ wartości zwracanej przez `if/else` w poniższym przypadku:
+    ```rust copy
+    let i = -1;
+    let res = if i >= 0 || i % 2 == 0 { println!("Nonnegative or even") };
+    println!("{:?}", res)
+    ```
+
+1. Określ typ wartości zwracanej przez `if/else` w poniższym przypadku:
+    ```rust copy
+    let i = -1;
+    let res = if i >= 0 {i};
+    println!("{:?}", res)
+    ```
+<Callout type="default">
+Wyjaśnij jaka zasada musi być spełniona, aby wyrażenia warunkowe mogło zwracać konkretną wartość?
+</Callout>
+
+## Pętle
+
+### Pętla `loop`
+
+1. Podstawowa pętla `loop` z wyjściem za pomocą instrukcji `break`:
+    ```rust copy
+    let mut x = 1;
+
+    loop {
+        println!("{}", x);
+        x = x + 1;
+
+        if x > 10 {
+            break;
+        }
+    }
+    ```
+
+1. Pętla `loop` może zwracać wartość:
+     ```rust copy
+    let mut x = 1;
+
+    let y = loop {
+        println!("{}", x);
+        x = x + 1;
+
+        if x > 10 {
+            break x;
+        }
+    };
+
+    println!("Results of loop is {}.", y);
+    ```
+
+
+### Pętla `while`
+
+1. Pętla warunkowa `while` z warunkiem stopu:
+    ```rust copy
+    let mut i = 0;
+    while i < 5 {
+        println!("{}", i);
+        i += 1;
+    }
+    ```
+
+1. Iteracja po tablicy z wykorzystaniem pętli `while` i indeksowania:
+    ```rust copy
+    let primes: [i32; 8] = [2, 3, 5, 7, 11, 13, 17, 19];
+
+    println!("Primes numbers:");
+
+    let mut i = 0;
+    while i < primes.len() {
+        println!("{}", primes[i]);
+        i += 1;
+    }
+    ```
+
+### Pętla `for`
+
+1. Iteracja po kolekcji z wykorzystaniem pętli `for`
+    ```rust copy
+    let primes: [i32; 8] = [2, 3, 5, 7, 11, 13, 17, 19];
+
+    println!("Primes numbers:");
+
+    for n in primes {
+        println!("{}", n);
+    }
+    ```
+
+1. Iteracja po tablicy z wykorzystaniem pętli `for` i indeksowania
+    ```rust copy
+    let primes: [i32; 8] = [2, 3, 5, 7, 11, 13, 17, 19];
+
+    println!("Primes numbers:");
+
+    for n in 0..primes.len() {
+        println!("{}", n);
+    }
+    ```
+
+1. Iteracja po zakresie liczb
+
+    ```rust copy
+    for i in 0..10 {
+        println!("{}", i);
+    }
+    ```

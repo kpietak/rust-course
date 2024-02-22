@@ -1,0 +1,75 @@
+{
+  "index": {
+    "title": "🏠"
+  },
+  "---": {
+    "type": "separator"
+  },
+  "01-intro": {
+    "title": "Podstawowe konstrukcje języka",
+    "type": "page",
+    "display": "hidden"
+  },
+  "02-ownership": {
+    "title": "Posiadanie",
+    "type": "page",
+    "display": "hidden"
+  },
+  "03-structures": {
+    "title": "Struktury danych",
+    "type": "page",
+    "display": "hidden"
+  },
+  "04-functions": {
+    "title": "Funkcje",
+    "type": "page",
+    "display": "hidden"
+  },
+  "05-pattern-matching": {
+    "title": "Dopasowanie wzorców",
+    "type": "page",
+    "display": "hidden"
+  },
+  "06-collections": {
+    "title": "Kolekcje",
+    "type": "page",
+    "display": "hidden"
+  },
+  "07-modules": {
+    "title": "Moduły",
+    "type": "page",
+    "display": "hidden"
+  },
+  "08-async": {
+    "title": "Programowanie asynchroniczne",
+    "type": "page",
+    "display": "hidden"
+  },
+  "09-errors": {
+    "title": "Obsługa błędów",
+    "type": "page",
+    "display": "hidden"
+  },
+
+
+  "menu": {
+    "title": "Rozdziały",
+    "type": "menu",
+    "items": {
+      "01-intro": {
+        "title": "1. Podstawowe konstrukcje języka",
+        "href": "/01-intro"
+      },
+      "02-ownership": {
+        "title": "2. Posiadanie",
+        "href": "/02-ownership"
+      }
+    }
+  },
+  "rust-docs": {
+    "title": "Dokumentacja Rust",
+    "type": "page",
+    "href": "https://doc.rust-lang.org/book/",
+    "newWindow": true
+  }
+}

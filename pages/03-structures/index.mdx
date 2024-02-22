@@ -1,0 +1,141 @@
+# Struktury danych
+
+## Definicja struktury
+
+1. W przykładowym projekcie, w katalogu `examples` dodaj plik `rectangle.rs`.
+1. Otwórz powyższy plik, a w nim utwórz strukturę danych opisującą prostokąt:
+    ```rust copy
+    #[derive(Debug)] // allows to print the structure in debug mode (ie. to use {:?})
+    struct Rectangle {
+        x : f32,
+        y : f32
+    }
+    ```
+1. Dodaj metodę `main`, w której utwórz nową instancję struktury `Rectangle` i wypisz ją na konsole:
+    ```rust copy
+    fn main() {
+        let r = Rectangle{x: 1.0, y: 2.0}; // create a new instance using constructor
+
+        println!{"{:?}", r};
+    }
+    ```
+1. Skompiluj kod i uruchom przykład:
+    ```copy
+    cargo run --example rectangle
+    ```
+
+    
+
+## Tworzenie nowych instancji
+
+1. Tworzenie nowej instancji, przetestuj kod w funkcji `main`:
+    ```rust copy
+    let r1 = Rectangle{x : 5, y : 6}
+    println!{"{:?}", r};
+    println("x: {}, y: {}", r1.x, r1.y);
+    ```
+1. Tworzenie instacji na bazie innej instancji
+    ```rust copy
+    let r2 = Rectangle{x : 5, ..r1} // the rest of r2 parameters are copied from r1
+    println!{"{:?}", r};
+    println("x: {}, y: {}", r2.x, r2.y);
+    ```
+
+### Metody fabryczne
+
+Jeśli nazwa parametru metody fabrycznej odpowiada nazwie atrybutu struktury danych, można go wykorzystać w konstrukturze w uproszczonej formie (bez konieczności przypisywania nazwy).
+
+1. Dodaj do pliku `rectangle.rs` metodę fabryczną tworzącą kwadrat:
+    ```rust copy
+    fn new_square(x : f32) -> Rectangle {
+        Rectangle{x, y : x} // the first argument can be passed in simplified form
+    }
+    ```
+1. Dodaj w metodzie `main` kod, który utworzy nowy kwadrat o boku 2.0.
+1. Skompiluj kod i uruchom przykład.
+
+## Dostęp i modyfikacja atrybutów
+
+1. Instancja niemutowalna - wszystkie atrybuty są niemutowalne
+    ```rust copy
+    let r3 = Rectangle{x : 5.0, y : 9.0};
+    println!("[{}, {}]", r3.x, r3.y);
+    ```
+1. Próba ustawienia wartości atrubutu
+    ```rust copy
+    r3.x = 6.0; // error
+    ```
+1. Instacja mutowalna
+    ```rust copy
+    let r4 = Rectangle{x : 5.0, y : 9.0};
+    println!("[{}, {}]", r4.x, r4.y);
+    r4.x = 6.0;
+    r4.y = 7.0;
+    println!("[{}, {}]", r4.x, r4.y);
+    ```
+
+
+Mutowalność struktury (na poziomie tworzenia nowej instancji). Nie można ustawiać mutowalności pojedynczych pól struktury.
+
+
+## Metody
+
+### Metody instancyjne 
+
+1. Pod definicją struktury `Rectangle` dodaj blok będący miejscem implementacji metod związanych z naszą strukturą
+    ```rust copy
+    impl Rectangle {
+        // the place for rectangle methods
+    }
+    ```
+1. **Wewnętz** powyższego bloku zdefiniuje metodę obliczającą pole prostokąta:
+    ```rust copy
+    fn area(&self) -> f32 {
+        self.x * self.y
+    }
+    ```
+1. W funkcji `main` dodaj kod, który wywoła metodę `area` na stworzonej wcześniej instrancji `Rectangle`
+    ```rust copy
+    println!("Area of {:?} is {}", r, r.area());
+    ```
+1. W analogiczny sposób dodaj metodę wyznaczającą obwód prostokąta.
+
+1. Dodaj metodę umożliwiającą przeskalowanie prostokąta o zadany współczynnik:
+    ```rust copy
+    fn scale(&mut self, factor:f32) {
+        self.x = self.x * factor;
+        self.y = self.y * factor;
+    }
+    ```
+1. W metodzie `main` utwórz nową instancję i wywołaj na nią metodę `scale`:
+    ```rust copy
+    let r = Rectangle{ x : 5.0, y : 4.0};
+    r.scale(2.0);
+    println!("Area of r is {}", r.area());
+    ```
+1. Czy kod się skompilował? Dlaczego?
+1. Jak poprawić powyższy przykład?
+
+### Metody powiązane
+
+1. Przenieś metodę fabryczną `new_square` do bloku `impl`. Blok ten powinien wyglądać następująco:
+    ```rust copy
+    impl Rectangle {
+        // ... other methods
+        
+        fn new_square(x : f32) -> Rectangle { // there is no self in the argument list
+            Rectangle{x, y : x}
+        }
+    }
+    ```
+1. W metodzie `main` utwórz nowy kwadrat i wydrukuj "go" na konsolę:
+    ```rust copy
+    let square = Rectangle::new_square(5.0);
+    println!("square: {:?}", square);
+    ```
+
+
+
+
+
+

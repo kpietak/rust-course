@@ -1,0 +1,53 @@
+import {Callout} from 'nextra/components'
+
+# Wprowadzenie
+
+1. Wejdź na stronę: https://play.rust-lang.org/
+1. Uruchom program typu "hello world" za pomocą przycisku *Run*
+    ![Rust Playground](/01-intro/rust-playground.png)
+1. Gratulacje - uruchomiłeś swój pierwszy program w Rust! 
+
+
+
+
+
+## Makro `println!`
+
+Zanim przejdziemy do odkrywania tajników język Rust, zapoznajmy się z makrem `println!`, które będziesz wykorzystywał do wypisywania pomocnych informacji oraz sprawdzania czy program działa w odpowiedni sposób.
+
+1. Makro `println!` służy do wypisywania informacji na konsolę (najczęściej w celu łatwiejszego śledzenia wykonania programu). 
+
+    <Callout type="info">
+    Makra w języku Rust są mechanizmem służącym do metaprogramowania. Omówienie koncepcji makr wybiega poza ramy przedmiotu, jeśli chcesz dowiedzieć się więcej, odsyłam do dokumentacji Rust [macro_rules!](https://doc.rust-lang.org/rust-by-example/macros.html). W trakcie zajęć poznamy jeszcze kilka predefiniowanych makr wchodzących w skład standardowej biblioteki.
+    </Callout>
+
+1. Makro przyjmuje pierwszy parametr określający tekst, który ma być wypisany na konsolę.
+
+    ```rust copy
+    fn main() {
+        println!("Hello world");
+    }
+    ```
+1. Makro może również wypisać wartości (bezpośrednio lub wskazywane przez zmienne). W tym celu wyokrzystuje się operator `{}`.
+
+    ```rust copy
+    fn main() {
+       let y = 5;
+        println!("The value of y is {}.", y);
+    }
+    ```
+
+    Liczba wystąpień operatora `{}` musi odpowiadać liczbie pozostałych parametrów przekazanych do makra `println!`.
+
+1. Jeśli chcemy wypisać dokładne informacje o danej zmiennej (w tak zwanym trybie debug), możemy wykorzystać operator `{:?}`.
+
+    ```rust copy
+    fn main() {
+        let y = (1,2,3);
+        println!("The value of y is {:#?}.", y);
+    }
+    ```
+    
+    <Callout type="info">
+    Więcej na temat tych operatorów oraz sposobu definiowania wyświetlania własnych struktur dowiesz się później. Na razie mamy podstawę do poznawania podstawowych mechanizmów języka.
+    </Callout>

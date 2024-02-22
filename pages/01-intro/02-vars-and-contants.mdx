@@ -1,0 +1,103 @@
+import {Callout} from 'nextra/components'
+
+# Zmienne i stałe
+
+<Callout type="warning">
+**Uwaga**
+
+Fragmenty kodu podawane w konspekcie należy przepisać lub wkleić do środka metody `main`. Dotyczy to wszystkich fragmentów, które nie zawierają kontekstu metody, struktury lub jasno nie wskazano, że mają być wpisane do danego pliku.
+</Callout>
+
+## Zmienne i ich przesłanianie
+Domyślnie wszystkie zmienne są niemutowalne (*immutable*), ale mogą być przesłaniane (*shadowed*). Nazwy zmiennych są definiowane zgodnie z konwencją `snake_case`.
+
+### Zmienne niemutowalne
+
+1. Zdefiniuj nową zmienną całkowita i wypisz jej wartość:
+
+    ```rust copy
+    let number : u32 = 12;
+    println!("{}", number);
+    ```
+1. **Inferencja typu**: Możesz pominać definicję typu, jeśli kompilator będzie w stanie wywnioskować typ zmiennej 
+    ```rust copy
+    let number = 12; // type inference
+    println!("{}", number);
+    ```
+
+1. Spróbuj przypisać nową wartość do zmiennej:
+    ```rust {2}
+    let number : u32 = 12;
+    number = 6; // error, cannot assign a new value to an unmutable variable
+    println!("{}", number);
+    ```
+
+### Nadpisywanie zmiennych
+
+1. Nadpisywanie zmiennych (ang. *variables shadowing*) polega na utworzeniu nowej zmiennej o takiej samej nazwie jak zdeklarowana wcześniej zmienna. Poprzednia zmienna jest usuwana z bieżącego kontekstu.
+
+    ```rust copy {3}
+    let spaces = "    "; // &str
+
+    let spaces = spaces.len(); // speces variable now points to len of text and its type is usize
+
+    println!("Size of spaces is {}", spaces);
+    ```
+
+1. 🤔 Jaką wartości wypisze poniższy kod? Wyjaśnij dlaczego? (zastanów się nad odpowiedzią zanim uruchomisz kod)
+
+    ```rust copy
+    fn main() { 
+        let x = 5; 
+        let x = x + 1; 
+        { 
+            let x = x * 2; 
+            println!("The value of x in the inner scope is: {}", x); 
+        } 
+        
+        println!("The value of x is: {}", x); }
+    ```
+
+{/* TODO: define here a simple verification, based on https://nextra.site/docs/guide/markdown*/}
+
+### Zmienne mutowalne
+
+1. Zdefiniuj zmienną mutowalną za pomocą słowa kluczowego `mut`
+
+    ```rust copy
+    let mut number : u32 = 12;
+    number = 6;
+
+    println!("{}", number);
+    ```
+
+<Callout type="info">
+**Chcesz wiedzieć więcej?**
+
+Dokumentacja Rust: [Variables and mutability](https://doc.rust-lang.org/book/ch03-01-variables-and-mutability.html)
+
+**Zmienne mutowalne vs. redefiniowanie zmiennych**
+
+Redefiniowanie zmiennych (ang. *shadowing*), w odróżnieniu od zmiennej mutowalnej, spowoduje błąd kompilacji, jeśli przypadkowo spróbujemy przypisać do niej nową wartość bez użycia słowa kluczowego `let`. 
+
+Ponadto w przypadku redefinicji zmiennej możemy zmienić jej typ - w praktyce tworzona jest nowa zmienna więc nie ma przeciwskazań, aby posiadała inny typ.
+
+</Callout>
+
+## Stałe
+```rust copy
+const DB_PORT : u32 = 5432;
+```
+
+1. Zgoodnie z konwencją nazwy stałych pisane są dużymi literami (`SCREAMING_SNAKE_CASE`).
+1. Różnice pomiędzy zmiennymi i stałymi:
+    - stałe nie mogą być mutowalne (sic!)
+    - przy definicji stałej zawsze należy podać typ wartości
+    - stałe mogą być zdefiniowane w dowolnym zasięgu, również w zasięgu globalnym,
+    - wartością stałej może być tylko stałe wyrażenie, którego wartość jest znana na etapie kompilacji
+
+<Callout type="info">
+**Chcesz wiedzieć więcej?**
+
+Dokumentacja Rust: [Constant evaluation](https://doc.rust-lang.org/reference/const_eval.html)
+</Callout>

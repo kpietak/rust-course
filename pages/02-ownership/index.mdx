@@ -1,0 +1,38 @@
+import {Callout} from 'nextra/components'
+
+# Ownership – posiadanie
+
+## Typ String
+
+Ilustracja koncepcji posiadania zostanie przedstawiona na typie tekstowych (`String`), który przechowywany jest na stercie.
+
+```rust copy
+fn main() {
+    let mut s = String::from("sample text"); // memory alocation 
+
+    s.push_str(" with some additional text"); 
+
+    println!("{}", s);
+} // s is going out of scope, the memory is automatically freed
+  // no garbage collector or manual free needed
+
+```
+
+<Callout type="default">
+Skąd wiadomo, że pamięć przechowująca utworzony tekst może być bezpieczenie zwolniona? 
+</Callout>
+
+## Ownership
+
+W Rust każda wartość ma jednego właściciela, który określa jej czas życia (ang. *lifetime*). Gdy właściciel jest zwalniany (ang. *dropped*), zwalniana jest równie wartość będąca jego własnością. 
+
+Główne zasady określania własności wartości:
+- Każda wartość w Rust ma zmienną, która jest nazywana jej _właścicielem_ (_owner_).
+- Właściciel może być tylko jeden w danym momencie.
+- Gdy właściciel wyjdzie poza zakres, wartość zostanie usunięta.
+
+
+
+
+
+## Odwołania i pożyczki

@@ -1,0 +1,99 @@
+import {Callout} from 'nextra/components'
+
+# Przenoszenie wartości
+
+## Move 
+1. Przepisz poniższy kod, w którym wartość zmiennej `s1` jest przypisywana do zmiennej `s2`. Zgodnie z powyższymi zasadą (o jednym właścicielu), wartość zostaje przeniesiona (ang. *move*), do zmiennej, która staje się jej właścicielem. Zmienna `s1` wychodzi poza zakres i nie może być wykorzystana poniżej linii 3.
+
+    ```rust showLineNumbers {3} copy
+    fn main() {
+        let s1 = String::from("sample");
+        let s2 = s1;
+        
+        println!("{}", s2);
+        // println!("{}", s1); // error, the value is invalid
+    }
+    ```
+1. Odkomentuj w powyższym kodzie linię 6 i zobacz błąd kompilatora.
+1. Zamień zmienną typu `String` na wartość całkowitą i spróbuj wypisać obie wartości.
+    
+    ```rust copy
+    fn main() {
+        let a = 6;
+        let b = a;
+        
+        println!("{}", a);
+        println!("{}", b); // error, the value is invalid
+    }
+    ```
+    <Callout type="default">
+    Czy kod się kompiluje i uruchamia? Dlaczego?
+    </Callout>
+    <Callout type="info">
+    Więcej na temat płytkiego kopiowania wartości oraz typie `Copy` znajdziesz w dalszych częściach konspektu.
+    </Callout>
+1. Głęboka kopia (ang. *deep copy*) wartości przechowywanych na stercie - metoda `clone`.
+    ```rust copy showLineNumbers {3} 
+    fn main() {
+        let s1 = String::from("sample");
+        let s2 = s1.clone();
+        
+        println!("{}", s2);
+        println!("{}", s1); // we have two copies of "sample" text at heap
+    }
+    ```
+
+## Posiadanie a funkcje
+
+1. Uruchom poniższy kod
+    ```rust copy showLineNumbers {10}
+    fn main() {
+        let n = 5;
+        
+        process_number(n);
+        process_number(n+1);
+
+        let text = String::from("sample");
+        
+        process_text(text);
+        // process_text(text);
+    }
+
+    fn process_text(s : String) {
+        println!("Processsing text: {}", s);
+    }
+
+    fn process_number(n : i32) {
+        println!("Processing number: {}", n)
+    }
+    ```
+1. Odkomentuj linię 10 (`process_text(text)`) i uruchom program.
+1. 🤔 Wyjaśnij dlaczego kod się nie kompiluje.
+1. Popraw kod, żeby uruchomił się poprawnie.
+
+## Zwracanie wartości z funkcji 
+
+1. Wartość zwracana przez funkcję przekazywana jest w posiadanie zmiennej, która jest przypisywana do jej rezultatu
+    ```rust copy
+    fn main() {
+        let s1 = create_text();
+        println!("{}", s1);
+    }
+
+    fn create_text() -> String {
+        String::from("text created inside a function")
+    }
+    ```
+1. Tę własność można wykorzystać do przetwarzania wartości w danej funkcji
+    ```rust copy
+    fn main() {
+        let s1 = String::from("sample text");
+        let s2 = process_text(s1);
+        println!("{}", s2);
+    }
+
+    fn process_text(s:String) -> String {
+        s.to_uppercase()
+    }
+    ```
+1. 🤔 Jak zaimplementować funkcję, której zadaniem jest przetworzenie więcej niż jednej wartości?

@@ -1,0 +1,104 @@
+import {Callout} from 'nextra/components'
+
+# Typy złożone
+
+## Krotki
+
+
+Krotka to niemodyfikowalna sekwencja wartości różnego typu. Krotki tworzymy za pomocą `()`, a każda krotka ma typ wyrażony jako: `(T1, T2, ...)`, gdzie `T1`, `T2` oznacza typy poszczególnych elementów krotki. 
+
+<Callout type="warning">
+Poniższe kroki wykonaj doklejając jeden po drugim fragmenty kodu z poszczególnych punktów.
+</Callout>
+
+1. Utwórz krotkę i wydrukuj wybrane jej elementy za pomocą indeksów. 
+
+    ```rust copy
+    let phone_entry = ("John Kirby", "+48 600 500 400", 1u8, true);
+
+    println!("Phone number {} belongs to {}", phone_entry.1, phone_entry.0);    
+    ```
+
+1. Wypisz zawartość całej krotki za pomocą operatora `{:?}`
+    ```rust copy
+    println!("Phone entry: {:?}", phone_entry);
+    ```
+    
+1. Wypisywanie krotek w taki sposób działa tylko dla krotek, które mają nie więcej niż 12 elementów. Spróbuj zdefiniować dłuższą krotkę i wypisać jej zawartość w podobny sposób. Sprawdź jaki wynik otrzymasz.
+    
+1. Aby utworzyć krotkę jednoelementową należy dodać dodatkowy przecinek po pierwszym elemencie. Pytanie po co tworzyć jednoelementowe krotki pozostaje bez odpowiedzi 🤫
+    ```rust copy
+    println!("One element tuple: {:?}", (5u32,));
+    ```
+
+1. Elementy krotki mogą być przypisane bezpośrednio do zmiennych, to tzw. dekonstrukcja krotki:
+    ```rust copy
+    let (name, number, sex, is_primary) = phone_entry;
+    println!("{:?}, {:?}, {:?}, {:?}", name, number, sex, is_primary);
+    ```
+
+<Callout type="info">
+**Chcesz wiedzieć więcej?**
+
+Dokumentacja Rust: [Tuples](https://doc.rust-lang.org/rust-by-example/primitives/tuples.html)
+</Callout>
+
+
+## Tablice
+
+Tablica to sekwencja elementów tego samego typu (w odróżnieniu od krotki), przechowywane w ciągłym obszarze pamięci. Tablice tworzymy za pomocą operatora `[]`, a jej długość musi być znana podczas kompilacji. Typ tablicy składa się z typu jej elementów oraz długości: `[T; length]`.
+
+1. Utwórz tablicę liczb pierwszych - inicjalizacja tablicy znanymi elementami
+    ```rust copy
+    let primes = [2, 3, 5, 7, 11, 13, 17, 19]; // type: [i32, 8]
+    ```
+
+1. Utwórz tablicę wypelnioną takimi samymi elemtami
+    ```rust copy
+    let zeros = [0; 100]; // type: [i32, 100]
+    ```
+
+1. Dostęp do elementów tablicy odbywa się poprzez indeksy 
+    ```rust copy
+    println!("First prime number is {}", primes[0]);
+    println!("Second prime number is {}", primes[1]);
+    ```
+
+1. Długość tablicy określa metoda `len`
+
+    ```rust copy
+    println!("Number of prime numbers in the array: {}", primes.len());
+
+    println!("The last prime numbers in the array: {}", primes[primes.len()-1]);
+    ```
+
+1. Odwołanie do indeksu z poza tablicy powoduje błąd kompilacji lub wykonania (*index out of bounds*)
+    ```rust copy
+    println!("{}", primes[primes.len()]);
+    ```
+1. Spróbuj napisać kod wywołujący błąd dostępu poza zakresem w tablicy, który zostanie wykryty na etapie kompilacji.
+
+<Callout type="info">
+**Chcesz wiedzieć więcej?**
+
+Dokumentacja Rust: [Arrays](https://doc.rust-lang.org/rust-by-example/primitives/array.html)
+</Callout>
+
+## Tablice wielowymiarowe
+
+1. Utwórz tablicę dwuwymiarową do gry w kółko i krzyżyk
+    ```rust copy
+    let mut board = [[' '; 3]; 3]; // fill in 3x3 array with char ' '
+
+    board[0][0] = 'x'; // point to element based on two-dimensional index
+    board[0][1] = 'o';
+
+    println!("{:?}", board);
+    ```
+
+1. Możesz również utworzyć tablicę wypełniając ją podanymi elementami 
+    ```rust copy
+    let mut board = [['x', 'o', 'x'], ['x', 'o', 'o'], ['x', 'o', 'x']];
+
+    println!("{:?}", board);
+    ```

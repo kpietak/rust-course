@@ -1,0 +1,117 @@
+import {Callout} from 'nextra/components'
+
+# Typy skalarne
+
+Rust jest językiem **statycznie typowanym**, co oznacza, że każda wartość posiada swój typ, zdefiniowany na etapie kompilacji. Podobnie jak w innych językach wyróżnia się typy proste (ang. *scalar types*) i typy złożone (ang. *compound types*).
+
+Rust posiada mechanizm inferencji typów, który oznacza, że kompilator stara się "domyślić" typu na podstawie danej wartości.
+
+1. Zdefiniuj zmienną całkowitą:
+	```rust copy
+	let x = 5 + 5; // i32
+	```
+
+1. Inferencja nie działa zawsze, np. w przypadku parsowania wartości konieczne jest podanie konkretnego typu:
+	```rust copy
+		let x: u32 = "432".parse().expect("Wrong number!");
+	```
+
+1. Spróbuj usunąć definicję typu i skompilować kod.
+
+
+<Callout type="info">
+**Chcesz wiedzieć więcej?**
+
+Dokumentacja Rust: [Data types](https://doc.rust-lang.org/book/ch03-02-data-types.html)
+</Callout>
+
+## Liczby całkowite 
+
+Rust, podobnie jak np. C, posiada wiele typów całkowitych, różniących się rozmiarem (liczbą bajtów przeznaczonych na reprezentację liczby) oraz zakresem (unsigned & signed).
+
+| Length  | Signed | Unsigned |
+|---------|--------|----------|
+| 8-bit   | i8     | u8       |
+| 16-bit  | i16    | u16      |
+| 32-bit  | i32    | u32      |
+| 64-bit  | i64    | u64      |
+| 128-bit | i128   | u128     |
+| arch    | isize  | usize    |
+
+1. Zdefiniuj liczby wykorzystując następujące sposoby zapisu wartości liczbowych
+	```rust copy
+	let d1 = 98222; // decimal
+	let d2 = 98_222; //  _ is a visual separator
+	let h = 0xff; // hex
+	let o = 0o77; // octal
+	let b = 0b1111_0000; // binary
+	let x = b'A' // byte (only for u8)
+	```
+
+1. Możliwe jest nadpisywanie domyślnego typu wartości za pomocą przyrostka:
+	```rust copy
+	let big_x = 1000u64;
+	let small_y = 5_u8;
+	```
+
+## Liczby zmiennoprzecinkowe
+
+1. Zdefiniuj przykładowe zmiennoprzecinkowe
+
+	```rust copy
+	let x = 2.0; // f64, default
+	let y: f32 = 3.0; // f32 
+	```
+
+## Operacje na liczbach
+
+1. Zdefiniuj przykładowe operacje arytmetyczne
+	```rust
+	// addition 
+	let sum = 5 + 10; 
+	
+	// subtraction 
+	let difference = 95.5 - 4.3; 
+	
+	// multiplication 
+	let product = 4 * 30; 
+	
+	// division 
+	let quotient = 56.7 / 32.2; 
+	let truncated = -5 / 3; // Results in -1 
+	
+	// remainder 
+	let remainder = 43 % 5; 
+	```
+
+1. Operacje numeryczne muszą być wykonywane na tym samym typie:
+	```rust copy
+	let x = 2u32;
+	let y = 5u8; 
+	let z = x + y; // compile error
+	```
+
+1. Wykorzystaj jawne rzutowanie typów z wykorzystaniem operatora `as`:
+
+	```rust copy
+	let x = 2u32;
+	let y = 5u8; 
+	let z = x + y as u32; // ok
+	```
+
+## Typ logiczny
+
+```rust copy
+let t = true;
+let f: bool = false; // with explicit type annotation
+```
+
+## Typ znakowy
+
+Wartości znakowe (char) definiujemy za pomocą pojedynczego cudzysłowia. Wartość znakowa zajmuje 4 bajty, jest definiowana w standardzie Unicode. 
+
+```rust copy
+let ch1 = 'a';
+let ch2 : char = 'b';
+let ch3 = '™'; // utf chars
+```

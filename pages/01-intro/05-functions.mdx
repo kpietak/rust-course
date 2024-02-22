@@ -1,0 +1,63 @@
+import {Callout} from 'nextra/components'
+
+# Funkcje
+
+## Definicja i wywoływanie funkcji
+
+1. Do definicji funkcji używamy słowa kluczowego `fn`, a nazwa funkcji, podobnie jak zmienne jest definionwana w konwencji *snake_case*
+
+    ```rust copy
+    fn main() {
+        // call a function
+        say_hello();
+    }
+
+    // define another function
+    fn say_hello() {
+        println!("Hello guys. I'm a function.")
+    }
+    ```
+
+## Parametry funkcji
+
+1. Lista parametrów funkcji umieszczana jest w nawiasach. Każdy parametr musi mieć określony typ
+    ```rust copy
+    fn main() {
+        // call a function
+        say_hello(5);
+    }
+
+    // define another function
+    fn say_hello(x : i32) {
+        println!("Hello guys. I'm a function with an integer parameter {}", x)
+    }
+    ```
+
+## Zwracanie wartości
+
+1. Aby funkcja mogła zwracać wartość, należy ją zadeklarować za pomocą znaku `->`, a następnie określenia typu zwracanej wartości
+
+    ```rust copy
+    fn main() {
+        println!("{}", get_one());
+    }
+
+    fn get_one() -> i32 {
+        1
+    }
+    ```
+1. Wartość zwracana przez funkcję jest taka sama jak wartość **ostatniego wyrażenia** w ciele funkcji. Możemy wyjść wcześniej z funkcji, wykorzystując słowo kluczowe `return` (z podaniem wartości), ale większość funkcji tworzonych jest bez użycia tego słowa.
+
+    ```rust copy
+    fn main() {
+        println!("{}", increment(10));
+    }
+
+    fn increment(n : i32) -> i32 {
+        n + 1
+    }
+    ```
+
+<Callout type="info">
+Wyrażenia zostaną omówione na kolejnej stronie.
+</Callout>

@@ -1,0 +1,67 @@
+
+
+## Wycińki łańcuchowe
+
+1. Wycinek łańcuchowy (ang. *string slice*) umożliwia odwołanie się do fragmentu tekstu, nie powodując pożyczenia wartości.
+
+    ```rust copy
+    let s = String::from("string slice demonstration");
+
+    let s1 = &s[7..12];
+
+    println!("{}", s1);
+    ```
+
+1. Możliwe jest również odwołanie podając tylko górne lub dolne ograniczenie
+
+    ```rust copy
+    let s = String::from("string slice demonstration");
+
+    let s1 = &s[..12];
+    let s2 = &s[6..];
+    let s3 = &s[..];
+    ```
+1. Typ wycinka łancuchowego to `&str`
+
+
+### Wypożyczenie za pomocą wycinka
+
+1. Wycinki należy traktować jako niemutowalne wypożyczenie danej wartości. Przyjrzyj się poniższemu fragmentowi kodu, który definiuje funkcję zwracającą wycinek będący pierwszym słowem w podanym tekście. 
+    ```rust copy  showLineNumbers {5}
+    fn main() {
+        let s = String::from("text that illustrates slices");
+        let first = first_word(&s[..]);
+        
+        // s.clear(); //tries to modify text
+
+        println!("{first}");
+    }   
+    
+    fn first_word(s : &str) -> &str {
+        let bytes = s.as_bytes();
+    
+        for (i, &item) in bytes.iter().enumerate() {
+            if item == b' ' {
+                return &s[..i]
+            }
+        }
+        s
+    }
+    ```
+1. Odkomentuj funkcję czyszczącą zawartość zmiennej `s` (linia 5). Przeanalizuj błąd kompilatora. Popraw deklarację zmiennej `s` na mutowalną i uruchom jeszcze raz kompilację.
+1. Literały tekstowe (ie. tekst definiowany w kodzie) jest typu `&str`. Uprość powyższy kod, aby nie trzeba było definiować łańcucha znaków (zmienna typu `String`).
+```rust copy
+    let s : &str = "text that illustrates slices";
+    let first = first_word(s);
+```
+
+## Wycinki tablicowe
+
+1. Wycinki możemy w analogiczny sposób zdefiniować dla typów tablicowych
+    ```rust copy
+    fn main() {
+        let array = [1, 2, 3, 4, 5];
+        let array_slice : &[i32] = &array[2..4];
+        println!("{:?}", array_slice);
+    }   
+    ```

@@ -1,0 +1,93 @@
+import {Callout} from 'nextra/components'
+
+# Referencje i pożyczki
+
+### Przekazywanie wartości przez referencję
+
+1. Referencja do wartości definiowana jest za pomocą operatora `&`, np.
+    ```rust copy
+    let s = String::from("sample");
+    let s_ref = &s;
+    ```
+1. Definicja parametrów w postaci referencji nazywa się **pożyczaniem** wartości. W takim przypadku funkcja nie posiada pożyczonej wartości i musi ją oddać po zakończeniu działania.
+    ```rust copy /&String/ /&s1/
+    fn main() {
+        let s1 = String::from("sample");
+        let s2 = process_text(&s1);  // lends the s1 value through a reference
+        println!("{} -> {}", s1, s2) // both s1 and s2 are valid
+    }
+
+    fn process_text(s: &String) -> String { // borrow s value and return new string
+        s.to_uppercase()
+    }
+    ```
+
+### Mutowalne referencje
+
+1. Wrócmy do funkcji, która chce przetworzyć podany tekst (tym razem będziemy chcieli skrócić dany tekst), ale spróbujmy zrobić to za pomocą pożyczenia wartości
+    ```rust copy 
+    fn main() {
+        let mut s1 = String::from("sample text");
+        process_text(&s1, 4);
+        println!("{}", s1);
+    }
+
+    fn process_text(s: &String, len : usize ) {
+        s.truncate(e, len)
+    }
+    ```
+1. Uruchom program i zastanów się na błędami kompilacji 
+1. Aby poprawić kod, nie tylko zmienna musi być mutowalna, ale również musimy jawnie wypożyczyć wartość w sposób, który umożliwi modyfikację wartości
+    ```rust copy showLineNumbers /&mut/
+    fn main() {
+        let mut s1 = String::from("sample text");
+        process_text(&mut s1, 4);
+        println!("{}", s1);
+    }
+
+    fn process_text(s: &mut String, len : usize) {
+        s.truncate(len)
+    }
+    ```
+
+### Praca z referencjami 
+
+<Callout type="info">
+**Reguły dotyczące referencji**
+
+W dowolnym momencie programu, dla jednej wartości możemy mieć tylko jeden z poniższych przypadków:
+- jedną mutowalną referencję,
+- dowolną liczbę niemutowalnych referencji.
+
+Ponadto wszystkie odwołania muszą być ważne, ie. muszą odnosić się do wartości, które nie są poza zakresem.
+</Callout>
+
+Uruchom kolejne fragmenty kodu i wyjaśnij, której reguły nie spełnia
+
+```rust copy
+let mut s = String::from("sample");
+let s1 = &mut s;
+let s2 = s;
+
+println!("{}, {}", s1, s2);
+```
+
+```rust copy
+let mut s = String::from("sample");
+let s1 = &mut s;
+let s2 = s;
+
+println!("{}, {}", s1, s2);
+```
+
+```rust copy
+fn main() {
+    let s = generate_ref_to_string();
+}
+
+fn generate_ref_to_string() -> &String {
+    &String::from("dangling text")
+}
+```
+
+
