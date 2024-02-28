@@ -1,13 +1,42 @@
+import {Callout} from 'nextra/components'
+
 ## Cechy (traits)
 
+## Definicja i implementacja cechy
 
-## Implementacja cechy w strukturze
+1. W pliku z poprzedniego ćwiczenia `rectangle.rs`, zdefiniuj nową cechę (ang. *trait*) określającą wspólne (sic!) cechy dla wszystkich dwuwymiarowych figur geometrycznych (trait `Shape`). Na początku pliku dodaj następujący fragment kodu:
+    ```rust copy
+    trait Shape {
+        fn area(&self) -> f32;
+        fn perimeter(&self) -> f32;
+    }
+    ```
+1. Następnie dodaj zdefiniowaną cechę do strutktury `Rectangle`. W tym celu musisz utworzyć nowy blok `impl`, którym dodasz własne implementacje zdefiniowanych metod:
+    ```rust copy
+    impl Shape for Rectangle {
+        fn area(&self) -> f32 {
+            self.x * self.y
+        }
+
+        fn perimeter(&self) -> f32 {
+            2f32 * (self.x + self.y)
+        }
+    }
+    ```
+1. Dodaj do funkcji `main` kod, który wywoła nowe metody na utworzynych instancja prostokątów. Sprawdź czy wszystko działa poprawnie.
+
+    <Callout type="default">
+    Zauważyłaś/eś, że struktura `Rectangle` ma teraz dwie metody `area`? Która metoda została wywołana w metodzie `main`? 
+    </Callout>
+
+    <Callout type="info">
+    Cechy mogą rozszerzać funkcje naszych struktur, mogą być również dodawane do istniejących struktur. Istnieje tylko jedna zasada: możemy zaimplementować cechę na typie tylko wtedy, gdy przynajmniej jedna z cech lub typ jest lokalny, tzn. zdefiniowany w aktualnej skrzynce (ang. *crate*). Na przykład, możemy zaimplementować standardowe cechy biblioteczne, takie jak `Display`, na niestandardowym typie, takim jak `Rectangle`, jako część funkcjonalności naszej bibliteki, ponieważ typ `Rectangle` jest lokalny. Możemy również zaimplementować `Shape` na `Vec<T>` w naszej skrzynce, ponieważ cecha `Shape` jest lokalna.
+
+    Nie możemy jednak implementować zewnętrznych cech na zewnętrznych typach. Na przykład, nie możemy zaimplementować cechy `Display` na `Vec<T>` w naszej skrzynce, ponieważ `Display` i `Vec<T>` są zdefiniowane w bibliotece standardowej i nie są lokalne dla naszej skrzynki. Reguła ta zapewnia, że kod innych osób nie może zepsuć twojego kodu i odwrotnie. Bez tej reguły dwie skrzynki mogłyby zaimplementować tę samą cechę dla tego samego typu, a Rust nie wiedziałby, której implementacji użyć.
+    </Callout>
 
 
-
-Other crates that depend on the aggregator crate can also bring the Summary trait into scope to implement Summary on their own types. One restriction to note is that we can implement a trait on a type only if at least one of the trait or the type is local to our crate. For example, we can implement standard library traits like Display on a custom type like Tweet as part of our aggregator crate functionality, because the type Tweet is local to our aggregator crate. We can also implement Summary on `Vec<T>` in our aggregator crate, because the trait Summary is local to our aggregator crate.
-
-But we can't implement external traits on external types. For example, we can't implement the `Display` trait on `Vec<T>` within our aggregator crate, because `Display` and `Vec<T>` are both defined in the standard library and aren't local to our aggregator crate. This restriction is part of a property called coherence, and more specifically the orphan rule, so named because the parent type is not present. This rule ensures that other people's code can't break your code and vice versa. Without the rule, two crates could implement the same trait for the same type, and Rust wouldn't know which implementation to use.
+### Domyślna implementacja metody
 
 ### Operatory
 https://doc.rust-lang.org/rust-by-example/trait/ops.html
