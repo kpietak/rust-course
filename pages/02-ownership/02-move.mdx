@@ -1,6 +1,6 @@
 import {Callout} from 'nextra/components'
 
-# Przenoszenie wartości
+# Przenoszenie własności wartości
 
 ## Move 
 1. Przepisz poniższy kod, w którym wartość zmiennej `s1` jest przypisywana do zmiennej `s2`. Zgodnie z powyższymi zasadą (o jednym właścicielu), wartość zostaje przeniesiona (ang. *move*), do zmiennej, która staje się jej właścicielem. Zmienna `s1` wychodzi poza zakres i nie może być wykorzystana poniżej linii 3.
@@ -23,7 +23,7 @@ import {Callout} from 'nextra/components'
         let b = a;
         
         println!("{}", a);
-        println!("{}", b); // error, the value is invalid
+        println!("{}", b); 
     }
     ```
     <Callout type="default">
@@ -60,7 +60,7 @@ import {Callout} from 'nextra/components'
     }
 
     fn process_text(s : String) {
-        println!("Processsing text: {}", s);
+        println!("Processing text: {}", s);
     }
 
     fn process_number(n : i32) {
@@ -92,7 +92,7 @@ import {Callout} from 'nextra/components'
         println!("{}", s2);
     }
 
-    fn process_text(s:String) -> String {
+    fn process_text(s: String) -> String {
         s.to_uppercase()
     }
     ```

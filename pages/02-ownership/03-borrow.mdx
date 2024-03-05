@@ -1,6 +1,6 @@
 import {Callout} from 'nextra/components'
 
-# Referencje i pożyczki
+## Referencje i pożyczki
 
 ### Przekazywanie wartości przez referencję
 
@@ -90,4 +90,40 @@ fn generate_ref_to_string() -> &String {
 }
 ```
 
+## Ćwiczenie - Popraw kod
 
+1. Popraw poniższy kod tak, aby się skompilował, możesz tylko zmienić kolejność linii w funkcji `main`. Wyjaśnij dlaczego kod po zmianach jest poprawny.
+    ```rust copy
+    fn main() {
+        let mut x = 100;
+        let y = &mut x;
+        let z = &mut x;
+        *y += 100;
+        *z += 1000;
+        assert_eq!(x, 1200);
+    }
+    ```
+1. Popraw kod jedynie poprzez dodawanie lub usuwanie referencji
+    ```rust code 
+    fn main() {
+        let data = "Rust is great!".to_string();
+
+        get_char(data);
+
+        string_uppercase(&data);
+    }
+
+    // Should not take ownership
+    fn get_char(data: String) -> char {
+        data.chars().last().unwrap()
+    }
+
+    // Should take ownership
+    fn string_uppercase(mut data: &String) {
+        data = &data.to_uppercase();
+
+        println!("{}", data);
+    }
+    ``` 
+
+*Źródło: powyższe zadania pochodzą z oficjalnych ćwiczeń rustlings, dostępnych w repozytorium https://github.com/rust-lang/rustlings/. Znajdziesz tam dużo więcej podobnych zadań.*
