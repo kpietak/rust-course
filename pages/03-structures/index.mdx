@@ -105,25 +105,31 @@ Mutowalność struktury (na poziomie tworzenia nowej instancji). Nie można usta
         // the place for rectangle methods
     }
     ```
-1. **Wewnętz** powyższego bloku zdefiniuje metodę obliczającą pole prostokąta:
+1. **Wewnętz** powyższego bloku zdefiniuje metodę obliczającą pole prostokąta. 
     ```rust copy
     fn area(&self) -> f32 {
         self.x * self.y
     }
     ```
+    <Callout type="info">
+    Zwróć uwage na pierwszy parametr metody (`&self`), który oznacza referencję do instancji struktury (musi to być zawsze pierwszy parametr metod instancyjnej). Referencję `self` możesz wykorzystać w ciele metody, aby odwołać się do pól instancji struktury lub innych metod instancyjnych.
+    </Callout>
 1. W funkcji `main` dodaj kod, który wywoła metodę `area` na stworzonej wcześniej instrancji `Rectangle`
     ```rust copy
     println!("Area of {:?} is {}", r, r.area());
     ```
 1. W analogiczny sposób dodaj metodę wyznaczającą obwód prostokąta.
 
-1. Dodaj metodę umożliwiającą przeskalowanie prostokąta o zadany współczynnik:
+1. Dodaj metodę umożliwiającą przeskalowanie prostokąta o zadany współczynnik.  
     ```rust copy
     fn scale(&mut self, factor:f32) {
         self.x = self.x * factor;
         self.y = self.y * factor;
     }
     ```
+    <Callout type="info">
+    Zwróć uwagę na pierwszy parametr metody (`&mut self`), który oznacza, że metoda ta będzie modyfikować instancję struktury.
+    </Callout>
 1. W metodzie `main` utwórz nową instancję i wywołaj na nią metodę `scale`:
     ```rust copy
     let r = Rectangle{ x : 5.0, y : 4.0};
