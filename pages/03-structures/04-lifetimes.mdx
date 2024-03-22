@@ -1,4 +1,152 @@
+import {Callout} from 'nextra/components'
+
 # Czas życia (ang. lifetime)
 
+Pamiętasz wiszące referencje z  [drugiego rozdziału](/02-ownership/03-borrow/#praca-z-referencjami)? Poniżej znajdziesz podobny przykład, tym razem z wykorzystaniem bloku kodu:
+```rust copy showLineNumbers {7}
+fn main() {
+    let ref;
+    {
+        let x = 5;
+        let ref = &x;
+    }
+    println!("{}", ref);
+}
+```
+W linii 7 następuje próba odwołania do wartości wskazywanej przez zmienną `ref`, wartość ta jednak jest już poza zakresem - została usunięta z pamięci.
 
-(w kontekście metod i struktur)
+<Callout type="info">
+Kompilator Rusta kontroluje czy referencja zawsze wskazuje na wartość, która istnieje (nie jest poza zakresem).
+</Callout>
+
+
+## Czas życia parametrów funkcji
+
+1. Napiszmy funkcję, która przyjmuje referencje do dwóch tablic z liczbami całkowitymi i zwraca długość dłuższej tablicy.
+    ```rust copy
+    fn len_longer_array(a : &[i32], b : &[i32]) -> usize {
+        if a.len() > b.len() {
+            a.len()
+        } else {
+            b.len()
+        }
+    }
+    ```
+1. Dopisz w funkcji `main` kod, który utworzy dwie różne tablice. Przetestuj działanie funkcji `len_longer_array`.
+1. Napisz funkcję `longer_array`, która zamiast długości dłuższej tablicy zwróci referencję do dłuższej tablicy. Czy napotkałeś/aś na błąd kompilacji? Dlaczego?
+  
+    Jeśli deklaracja funkcji wygląda następująco: 
+    ```rust 
+    fn longer_array(a : &[i32], b : &[i32]) -> &[i32] {
+        ...
+    }
+    ```
+    to prawdopobnie otrzymałeś/aś błąd: `expected named lifetime parameter`.
+1. Określ **czasy życia** dla poszczególnych parametrów i powiąż je z czasem życia wartości zwracanej. 
+
+    W naszym przypadku, wartość zwracana powinna być ważna tak długo jak ważna jest wartość `a` lub `b`, co oznacza, że referencja zwracana powinna być ważna tak samo długo jak krótszy czas życia parametrów funkcji. 
+
+    Zachowanie takie oznaczamy za pomocą adnotacji dla czasu życia, którą dodajemy do każdego parametru i typu zwracanego:
+
+    ```rust
+    fn longer_array<'a>(a : &'a [i32], b : &'a [i32]) -> &'a [i32] {
+        ...
+    }
+    ```
+1. Popraw sygnaturę funkcji i uruchom program - czy kod poprawnie się uruchamia? 
+
+<Callout type="info">
+**Reguły pomijania czasu życia** 
+
+... czyli kiedy nie potrzebujemy jawnie specyfikować czasów życia?
+
+Każdy parametr będący odwołaniem (referencją) przyjmuje swój własny parametr czasu życia. Oznacza to, że na przykład  funkcja jednoargumentowa posiada jeden parametr czasu życia (`fn foo<'a>(x : &'a i32)`), a funkcja dwuargumentowa definiuje dwa parametry czasu życia (`fn bar<'a, 'b>(x : &'a i32, y : &'b i32)`).
+
+Jeśli jest dokładnie jeden parametr czasu życia wejścia (parametrów funkcji), to ten czas życia jest przypisany do wszystkich parametrów czasu życia wyjścia (wartości zwracanych): `fn foo<'a>(x : &'a i32) -> &'a i32`.
+
+Jeśli jest kilka parametrów czasu życia wejścia, lecz jednym z nich jest `&self` lub `&mut self` (ie. mamy do czynienia z metodą), czas życia `self` zostaje przypisany do wszystkich parametrów czasu wyjścia.
+
+</Callout>
+
+
+## Czas życia atrybutów instancji struktur
+
+1. Zdefiniuj strukturę `Introduction`, która ma przechowywać wskazanie (wycinek) na pierwsze zdanie dłuższego tekstu:
+    ```rust
+    struct Introduction {
+        intro : &str
+    }
+    ```
+1. Skompiluj kod i przyjrzyj się komunikatom kompilatora. Wyjaśnij dlaczego kod jest niepoprawny?
+1. Popraw definicję struktury, aby wprowadzić czas życia dla atrybutu `intro`:
+    ```rust
+    struct Introduction<'a> {
+        intro : &'a str
+    }
+    ```
+1. Dodaj kod, który tworzy instancję struktury:
+    ```rust
+    fn main() {
+        let text = String::from("Introduction to a long text. The rest of long text with many sentences.");
+
+        let intro = text.split('.').next().expect("Could not find a first sentence.");
+
+        let i = Introduction { intro };
+    }
+    ```
+
+
+## Czas życia w definicji metod
+
+1. Dodaj do definicji struktury `Introduction` metodę `print`, która wydrukuje wstęp na terminalu
+    ```rust
+    impl Introduction {
+        fn print(&self) {
+            println!("{}", self.intro);
+        }
+    }
+    ```
+1. Skompiluj kod i przyjrzyj się komunikatom kompilatora. 
+1. Uzupełnij powyższy fragment kodu dodajać specyfikację czasu życia
+    ```rust
+    impl<'a> Introduction<'a> {
+        fn print(&self) {
+            println!("{}", self.intro);
+        }
+    }
+    ```
+1. Dopisz metodę, która będzie zwracać tekst wprowadzenia. Czy jest potrzebna specyfikacja czasu życia w sygnaturze metody? Dlaczego?
+
+
+## Statyczny czas życia
+
+1. Napisz funkcję, która zwraca wycinek tekstu, np:
+    ```rust
+    fn get_sample_text() -> &str {
+        "Just a sample text"
+    }
+    ```
+1. Skompiluj kod i przyjrzyj się komunikatom kompilatora. 
+1. Rozwiązaniem problemu jest zwrócenie typu posiadanego, czyli w tym przypadku `String`. Jeśli jednak nie chcemy tego robić możemy ustawić czas życia zwracanej wartości na `static`, co spowoduje, że wartość ta będzie "żyła", aż do końca wykonania programu.
+    ```rust
+    fn get_sample_text() -> &'static str {
+        "Just a sample text"
+    }
+    ```
+1. Spróbuj utworzyć wartość tekstową za pomocą `String::from`:
+    ```rust
+    fn get_sample_text() -> &'static str {
+        String::from("Just a sample text").as_str()
+    }
+    ```
+1. Dlaczego ten kod nie działa?
+
+    <Callout type="info">
+    Określanie czasu życia referencji jako `static` (choć, czasem jest zalecane przez kompilator) należy potraktować jako wyjątkową sytuację. Najczęściej problem z czasem życia wynika z próby utworzenia wiszącej referencji lub złego dopasowania czasów życia. W takich przypadkach należy rozwiązać te problemu, a nie określać czas życia jako `static` (co może oczywiście rozwiązać problem kompilacji).         
+    </Callout>
+
+## Dodatkowe materiały
+
+<Callout type="info">
+Jeśli chcesz dowiedzieć się więcej na temat czasu życia zachęcam do zapoznania się z ćwiczeniami na stronie: [lifetimekata](https://tfpk.github.io/lifetimekata/index.html).
+</Callout>
