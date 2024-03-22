@@ -1,15 +1,97 @@
-## Cechy (traits)
+import {Callout} from 'nextra/components'
+
+# Cechy (traits)
+
+## Definicja i implementacja cechy
+
+1. W pliku z poprzedniego ćwiczenia `rectangle.rs`, zdefiniuj nową cechę (ang. *trait*) określającą wspólne (sic!) cechy dla wszystkich dwuwymiarowych figur geometrycznych (trait `Shape`). Na początku pliku dodaj następujący fragment kodu:
+    ```rust copy
+    trait Shape {
+        fn area(&self) -> f32;
+        fn perimeter(&self) -> f32;
+    }
+    ```
+1. Następnie dodaj zdefiniowaną cechę do strutktury `Rectangle`. W tym celu musisz utworzyć nowy blok `impl`, którym dodasz własne implementacje zdefiniowanych metod:
+    ```rust copy
+    impl Shape for Rectangle {
+        fn area(&self) -> f32 {
+            self.x * self.y
+        }
+
+        fn perimeter(&self) -> f32 {
+            2f32 * (self.x + self.y)
+        }
+    }
+    ```
+1. Dodaj do funkcji `main` kod, który wywoła nowe metody na utworzynych instancja prostokątów. Sprawdź czy wszystko działa poprawnie.
+
+    <Callout type="default">
+    Zauważyłaś/eś, że struktura `Rectangle` ma teraz dwie metody `area`? Która metoda została wywołana w metodzie `main`? 
+    </Callout>
+
+    <Callout type="info">
+    Cechy mogą rozszerzać funkcje naszych struktur, mogą być również dodawane do istniejących struktur. Istnieje tylko jedna zasada: możemy zaimplementować cechę na typie tylko wtedy, gdy przynajmniej jedna z cech lub typ jest lokalny, tzn. zdefiniowany w aktualnej skrzynce (ang. *crate*). Na przykład, możemy zaimplementować standardowe cechy biblioteczne, takie jak `Display`, na niestandardowym typie, takim jak `Rectangle`, jako część funkcjonalności naszej bibliteki, ponieważ typ `Rectangle` jest lokalny. Możemy również zaimplementować `Shape` na `Vec<T>` w naszej skrzynce, ponieważ cecha `Shape` jest lokalna.
+
+    Nie możemy jednak implementować zewnętrznych cech na zewnętrznych typach. Na przykład, nie możemy zaimplementować cechy `Display` na `Vec<T>` w naszej skrzynce, ponieważ `Display` i `Vec<T>` są zdefiniowane w bibliotece standardowej i nie są lokalne dla naszej skrzynki. Reguła ta zapewnia, że kod innych osób nie może zepsuć twojego kodu i odwrotnie. Bez tej reguły dwie skrzynki mogłyby zaimplementować tę samą cechę dla tego samego typu, a Rust nie wiedziałby, której implementacji użyć.
+    </Callout>
+
+### Domyślna implementacja metody
+
+Metody definiowane w cechach mogą mieć domyślną implementację lub implementacja ta może być wspólna dla wszystkich typów implementujących daną cechę.
+
+1. Dodaj do cechy `shape` metodę `describe`:
+    ```rust
+    trait Shape {
+        ...
+
+        fn describe(&self) {
+            println!("I'm a general shape.");
+        }
+    }
+    ```
+1. W funkcji `main` dodaj wywołanie metody `describe` na instancji prostokąta. Uruchom program i zobacz wynik.
+1. Metodę domyślną możesz nadpisać w strukturze. Dopisz implementację metody `describe` w strukturze `Rectangle`.
+    ```rust copy
+    impl Shape for Rectangle {
+        ...
+
+        fn describe(&self) {
+            println!("I'm a rectangle.");
+        }
+    }
+    ```
+1. Uruchom ponownie kod i zobacz rezultat.
 
 
-## Implementacja cechy w strukturze
+## Implementacja cechy z innego modułu
+
+Standardowa bibliotek Rust oraz biblioteki otwartoźródłowe dostarczają wiele cech, które mogą wzbogacić zachowanie naszych struktur. Przykładem jest tutaj cecha `Display`, która pozwala zdefiniować sposób wypisywania struktury w terminalu.
+
+1. W tym samym pliku, `rectangle.rs` dodaj blok kodu, który zaimplementuję cechę `Display` dla struktury `Rectangle`
+    ```rust copy
+    impl Display for Rectangle {
+        fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+            todo!()
+        }
+    }
+    ```
+1. Na początku pliku dodaj instrukcję `use`, która zaimportuje typ `Display` i `Formatter` do bieżącego kontekstu (materiał o modułach i użyciu typów z innych modułów znajdziesz w kolejnych rozdziałach).
+    ```rust copy
+    use std::fmt::{Display, Formatter};
+    ```
+1. Zaimplementuj metodę `fmt` tak aby wypisała informacje o wysokości i szerokości prostokąta. Do wypisywania zawartości wykorzystaj makro `write!`. Przykładowa implementacja:
+    ```rust copy
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Rectangle[x={},y={}]", self.x, self.y)?;
+        Ok(())
+    }
+    ```
+1. W funkcji `main` wypisz informacje o prostokącie (zmiennej `r`) dodając następującą linię kodu:
+    ```rust copy
+    println!("{}", r);
+    ```
+
+Dzięki implementacji cechy `Display` dla struktury prostokąta, można wypisać informacje o instancji struktury używająć nawiasów klamrowych (`{}`).
 
 
 
-Other crates that depend on the aggregator crate can also bring the Summary trait into scope to implement Summary on their own types. One restriction to note is that we can implement a trait on a type only if at least one of the trait or the type is local to our crate. For example, we can implement standard library traits like Display on a custom type like Tweet as part of our aggregator crate functionality, because the type Tweet is local to our aggregator crate. We can also implement Summary on `Vec<T>` in our aggregator crate, because the trait Summary is local to our aggregator crate.
-
-But we can't implement external traits on external types. For example, we can't implement the `Display` trait on `Vec<T>` within our aggregator crate, because `Display` and `Vec<T>` are both defined in the standard library and aren't local to our aggregator crate. This restriction is part of a property called coherence, and more specifically the orphan rule, so named because the parent type is not present. This rule ensures that other people's code can't break your code and vice versa. Without the rule, two crates could implement the same trait for the same type, and Rust wouldn't know which implementation to use.
-
-### Operatory
-https://doc.rust-lang.org/rust-by-example/trait/ops.html
-
-https://doc.rust-lang.org/core/ops/

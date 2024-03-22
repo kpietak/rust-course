@@ -1,0 +1,55 @@
+import {Callout} from 'nextra/components'
+
+# Ćwiczenia
+
+## Wektory 2D
+
+### Struktura wektora i podstawowe metody:
+
+1. Zimplementuj strukturę `Vec2D` reprezentującą dwuwymiarowy wektor $v = [x, y], x, y \in \mathbb{R}$. 
+1. Zdefiniuj metodę pozwalającą na czytelne wypisanie wektora na konsolę.
+1. Dodaj do wektora metodę fabryczną dla wektora jednostkowego.
+1. Napisz metodą sprawdzającą czy dwa wektory są równe.
+
+### Operacje na wektorach (operatory matematyczne):
+
+1. Napisz podstawowe operatory dla działań na wektorach: dodawanie, odejmowanie, mnożenie wektora przez liczbę oraz iloczyn skalarny. Dla podstawowych operatorów wykorzystaj predefiniowane cechy (`std::ops::Add`, `std::ops::Sub`). Możesz wykorzystać następujący fragment kodu:
+    ```rust copy
+    use std::ops::{Add, Sub};
+
+
+    impl Add for Vec2D {
+        type Output = Self; // Output describes the resulting type after applying the + operator. 
+                            // Self describes the current type, here it means Vec2D
+
+        fn add(self, other: Vec2D) -> Self {
+            todo!();
+        }
+    }
+
+    impl Sub for Vec2D {
+        type Output = Self;
+
+        fn sub(self, other: Vec2D) -> Self {
+            todo!();
+        }
+    }
+    ```
+1. Napisz kod prezentujacy działania na wektorach.
+
+<Callout type="info">
+Więcej na temat cech operatorów znajdziesz w:
+- oficjalnej dokumentacji Rusta: https://doc.rust-lang.org/core/ops/ 
+- przykładach: https://doc.rust-lang.org/rust-by-example/trait/ops.html
+</Callout>
+
+## Statek kosmiczny
+
+Utwórz model statku kosmicznego, poruszającego się po planszy 2D, posiadającego swoje położenie (punkt na płaszczyśnie w przestrzeni liczb rzeczywistych oraz kierunek). 
+
+Zaimplementuj metody, które umożliwią
+- obrót statku o zadany kąt,
+- przesunięcie statku w aktualnym kierunku, o dany wektor, 
+- zaprezentowanie bieżącej pozycji, 
+- obliczenie odległości między statkiem a zadanym punktem,
+- obliczenie odległości między dwoma statkami.

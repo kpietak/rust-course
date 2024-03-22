@@ -1,6 +1,38 @@
+import {Callout} from 'nextra/components'
+
 # Struktury danych
 
-## Definicja struktury
+## Typy struktur
+
+1. **Struktura jednostkowa/pusta** (ang. *unit-like structure*) 
+    ```rust copy
+    struct EmptyStructure; 
+
+    fn main() {
+        let es = EmptyStructure;
+    }
+    ```
+1. 🤔 Czy i w jakim celu możemy definiować takie struktury?
+1. **Struktura a'la krotka** (ang. *tuple structure*)
+    ```rust copy
+    struct Color(i32, i32, i32); // fields are without names (are access as in tuple)
+    struct Point(i32, i32, i32); // a different structure with the same types
+
+    fn main() {
+        let black = Color(0, 0, 0);
+        let origin = Point(0, 0, 0);
+    }
+    ```
+1. Po prostu **struktura** 😈:
+    ```rust copy
+    struct Point {
+        x : f32,    // named attributes like in classes
+        y : f32,
+    }
+    ```
+
+
+## Tworzenie instancji struktury
 
 1. W przykładowym projekcie, w katalogu `examples` dodaj plik `rectangle.rs`.
 1. Otwórz powyższy plik, a w nim utwórz strukturę danych opisującą prostokąt:
@@ -17,6 +49,8 @@
         let r = Rectangle{x: 1.0, y: 2.0}; // create a new instance using constructor
 
         println!{"{:?}", r};
+        
+        println("x: {}, y: {}", r1.x, r1.y); // access particular fields using . operator
     }
     ```
 1. Skompiluj kod i uruchom przykład:
@@ -24,35 +58,20 @@
     cargo run --example rectangle
     ```
 
-    
-
-## Tworzenie nowych instancji
-
-1. Tworzenie nowej instancji, przetestuj kod w funkcji `main`:
-    ```rust copy
-    let r1 = Rectangle{x : 5, y : 6}
-    println!{"{:?}", r};
-    println("x: {}, y: {}", r1.x, r1.y);
-    ```
-1. Tworzenie instacji na bazie innej instancji
+1. Możesz również utworzyć instancje na bazie innej instancji (poniższy kod dopisz do funkcji `main` z poprzedniego punktu)
     ```rust copy
     let r2 = Rectangle{x : 5, ..r1} // the rest of r2 parameters are copied from r1
     println!{"{:?}", r};
     println("x: {}, y: {}", r2.x, r2.y);
     ```
 
-### Metody fabryczne
+<Callout type="info">
+Atrybuty struktur danych, w kontekście posiadania wartości, zachowują się w analogicznych sposób jak zmienne. 
 
-Jeśli nazwa parametru metody fabrycznej odpowiada nazwie atrybutu struktury danych, można go wykorzystać w konstrukturze w uproszczonej formie (bez konieczności przypisywania nazwy).
+Jeśli atrybut jest typu, który posiada daną wartość (ang. *owned type*), to właśność tej wartości należy do instancji struktury. Oznacza to, że wartość ta zostanie usunięta z pamięci w sytuacji, kiedy instancja struktury wyjdzie poza zakres.
 
-1. Dodaj do pliku `rectangle.rs` metodę fabryczną tworzącą kwadrat:
-    ```rust copy
-    fn new_square(x : f32) -> Rectangle {
-        Rectangle{x, y : x} // the first argument can be passed in simplified form
-    }
-    ```
-1. Dodaj w metodzie `main` kod, który utworzy nowy kwadrat o boku 2.0.
-1. Skompiluj kod i uruchom przykład.
+Jeśli natomist atrybut struktury jest referencją, to konieczne będzie określenie czasu życia takiej wartości - o czym będzie więcej w sekcji [Czas życia](03-structures/03-lifecycle).
+</Callout>
 
 ## Dostęp i modyfikacja atrybutów
 
@@ -67,16 +86,14 @@ Jeśli nazwa parametru metody fabrycznej odpowiada nazwie atrybutu struktury dan
     ```
 1. Instacja mutowalna
     ```rust copy
-    let r4 = Rectangle{x : 5.0, y : 9.0};
+    let mut r4 = Rectangle{x : 5.0, y : 9.0};
     println!("[{}, {}]", r4.x, r4.y);
     r4.x = 6.0;
     r4.y = 7.0;
     println!("[{}, {}]", r4.x, r4.y);
     ```
 
-
 Mutowalność struktury (na poziomie tworzenia nowej instancji). Nie można ustawiać mutowalności pojedynczych pól struktury.
-
 
 ## Metody
 
@@ -88,25 +105,31 @@ Mutowalność struktury (na poziomie tworzenia nowej instancji). Nie można usta
         // the place for rectangle methods
     }
     ```
-1. **Wewnętz** powyższego bloku zdefiniuje metodę obliczającą pole prostokąta:
+1. **Wewnętz** powyższego bloku zdefiniuje metodę obliczającą pole prostokąta. 
     ```rust copy
     fn area(&self) -> f32 {
         self.x * self.y
     }
     ```
+    <Callout type="info">
+    Zwróć uwage na pierwszy parametr metody (`&self`), który oznacza referencję do instancji struktury (musi to być zawsze pierwszy parametr metod instancyjnej). Referencję `self` możesz wykorzystać w ciele metody, aby odwołać się do pól instancji struktury lub innych metod instancyjnych.
+    </Callout>
 1. W funkcji `main` dodaj kod, który wywoła metodę `area` na stworzonej wcześniej instrancji `Rectangle`
     ```rust copy
     println!("Area of {:?} is {}", r, r.area());
     ```
 1. W analogiczny sposób dodaj metodę wyznaczającą obwód prostokąta.
 
-1. Dodaj metodę umożliwiającą przeskalowanie prostokąta o zadany współczynnik:
+1. Dodaj metodę umożliwiającą przeskalowanie prostokąta o zadany współczynnik.  
     ```rust copy
     fn scale(&mut self, factor:f32) {
         self.x = self.x * factor;
         self.y = self.y * factor;
     }
     ```
+    <Callout type="info">
+    Zwróć uwagę na pierwszy parametr metody (`&mut self`), który oznacza, że metoda ta będzie modyfikować instancję struktury.
+    </Callout>
 1. W metodzie `main` utwórz nową instancję i wywołaj na nią metodę `scale`:
     ```rust copy
     let r = Rectangle{ x : 5.0, y : 4.0};
@@ -118,20 +141,26 @@ Mutowalność struktury (na poziomie tworzenia nowej instancji). Nie można usta
 
 ### Metody powiązane
 
-1. Przenieś metodę fabryczną `new_square` do bloku `impl`. Blok ten powinien wyglądać następująco:
+1. W bloku `impl` utwórz metodę `new_square`, który utworzy nowy kwadrat (metody tego typu nazywane są metodami fabrycznymi). Blok ten powinien wyglądać następująco:
     ```rust copy
     impl Rectangle {
         // ... other methods
         
         fn new_square(x : f32) -> Rectangle { // there is no self in the argument list
-            Rectangle{x, y : x}
+            Rectangle{x : x, y : x}
         }
     }
     ```
-1. W metodzie `main` utwórz nowy kwadrat i wydrukuj "go" na konsolę:
+1. Metody powiązane wywołujemy za pomocą nazwy struktury, a następnie dwóch znaków dwukropka, w naszym przypadku będzie to `Rectangle::new_square`. W metodzie `main` utwórz nowy kwadrat i wydrukuj "go" na konsolę:
     ```rust copy
     let square = Rectangle::new_square(5.0);
     println!("square: {:?}", square);
+    ```
+1. Możesz uprościć metodę `new_square` wykorzystując regułę, pozwalającą na automatyczne przypisane parametru funkcji do parametru tworzonej instancji struktury o tej samej nazwie:
+    ```rust copy
+    fn new_square(x : f32) -> Rectangle {
+        Rectangle{x, y : x} // the first argument can be passed in simplified form
+    }
     ```
 
 

@@ -50,8 +50,6 @@
     "type": "page",
     "display": "hidden"
   },
-
-
   "menu": {
     "title": "Rozdziały",
     "type": "menu",
@@ -63,6 +61,10 @@
       "02-ownership": {
         "title": "2. Posiadanie",
         "href": "/02-ownership"
+      },
+      "03-structures": {
+        "title": "3. Struktury danych",
+        "href": "/03-structures"
       }
     }
   },
