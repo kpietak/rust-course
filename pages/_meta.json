@@ -20,13 +20,13 @@
     "type": "page",
     "display": "hidden"
   },
-  "04-functions": {
-    "title": "Funkcje",
+  "04-pattern-matching": {
+    "title": "Dopasowanie wzorców",
     "type": "page",
     "display": "hidden"
   },
-  "05-pattern-matching": {
-    "title": "Dopasowanie wzorców",
+  "05-functions": {
+    "title": "Funkcje",
     "type": "page",
     "display": "hidden"
   },
