@@ -1,1 +1,20 @@
-Dopasowanie wzorców
+# Typy wyliczeniowe
+
+## Definicja prostego wyliczenia
+
+1. Typ wyliczeniowy tworzony jest za pomocą słowa kluczowego `enum`:
+    ```rust
+    enum UIEvent {
+        ButtonClicked,
+        ScrollDown
+    }
+    ```
+1. Utworzenie wartości wyliczenia:
+    ```rust
+    let clicked = UIEvent::ButtonClicked;
+    let scroll = UIEvent::Scroll;
+    ```
+
+
+
+https://doc.rust-lang.org/rust-by-example/custom_types/enum.html
