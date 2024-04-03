@@ -1,0 +1,160 @@
+import {Callout} from 'nextra/components'
+
+# Dopasowanie wzorca
+
+## Konstrukcja `match`
+
+1. Dopisz do enumeracji z poprzedniego ćwiczenia (typ `UIEvent`) funkcję obsługującą dane zdarzenia:
+    ```rust
+    fn call(event : UIEvent) {
+        match event {
+            ButtonClicked => println!("Button clicked"), // simple match
+            Scroll(x) => println!("Scroll {:?}", x), // attribute extraction
+            KeyPressed(ch) => { // whole block
+                let up_ch = ch.to_uppercase();
+                println!("Key pressed: {}", up_ch);
+            }
+        }
+    }
+    fn main() {
+        let clicked = ButtonClicked;
+        let scroll = Scroll(Direction::Down);
+        let key_pressed = KeyPressed('b');
+        call(clicked);
+        call(scroll);
+        call(key_pressed);
+    }
+    ```
+<Callout type="info">
+Zasady działania konstrukcji `match`?
+- przetwarzania od góry do dołu,
+- brak zachowania *fall-through* - dopasowanie do jednego wzorca, kończy dalsze przetwarzanie,
+- konieczność dopasowania co najmniej jednego warunku; reguła ta sprawdzana jest na etapie kompilacji,
+- `match` jest wyrażeniem, a więc może zwracać wartość; typ zwracanej wartości musi być wspólny dla wszystkich wariantów.
+</Callout>
+
+### Dopasowanie pozostałych wartości
+
+1. Konstrukcja `match` może zostać wykorzystana również do dopasowania zwykłych wartości (nie tylko typów wyliczeniowych). Przykładem może być tutaj dopasowanie liczby. Należy jednak pamiętać, że musimy zapewnić dopasowanie wszystkich możliwych wartości. W tym celu, aby nie musieć pisać wszystkich wartości z osobna, można wykorzystać symbol `_`:
+
+    ```rust
+    fn main() {
+        let x = 2u8;
+    
+        match x {
+            1 => println!("one"),
+            2 => println!("two"),
+            3 => println!("three"),
+            _ => println!("other number")
+        }
+    }
+    ```
+
+## Konstrukcja `if let`
+
+1. Konstrukcja `if let` jest wykorzystywana wtedy gdy chcemy dopasować tylko jeden wzorzec, a całą resztę pominać. Na przykład mowa o takiej sytuacji:
+    ```rust
+    fn main() {
+        let x = Some(2);
+    
+        match x {
+            Some(x) => println!("{}"),
+            None => ()
+        }
+    }
+    ```
+1. Powyższa konstrukcję można zastąpić w następujący sposób:
+    ```rust
+    fn main() {
+        let x = Some(2);
+    
+        if let Some(x) = x {
+            println!("{}", x);
+        }
+    }
+    ```
+1. Można (zarówno w konstrukcji `match` oraz `let if`) wzorzec może zawierać konkretne wartości:
+    ```rust
+    fn main() {
+        let x = Some(2);
+    
+        if let Some(2) = x {
+            println!("{}", x);
+        }
+    }
+    ```
+
+<Callout type="info">
+Więcej informacji o dopasowaniu wzorców znajdziesz na stronie: https://doc.rust-lang.org/book/ch18-03-pattern-syntax.html
+</Callout>
+
+## Ćwiczenie
+
+Zdefiniuje typ wyliczeniowy `Message` oraz funkcję `process` na bazie ich użycia w teście `test_match_message_call`, przy użyciu zdefiniowanych metod.
+
+```rust
+enum Message {
+    // TODO: implement the message variant types based on their usage below
+}
+
+struct Point {
+    x: u8,
+    y: u8,
+}
+
+struct State {
+    color: (u8, u8, u8),
+    position: Point,
+    quit: bool,
+    message: String,
+}
+
+impl State {
+    fn change_color(&mut self, color: (u8, u8, u8)) {
+        self.color = color;
+    }
+
+    fn quit(&mut self) {
+        self.quit = true;
+    }
+
+    fn echo(&mut self, s: String) {
+        self.message = s
+    }
+
+    fn move_position(&mut self, p: Point) {
+        self.position = p;
+    }
+
+    fn process(&mut self, message: Message) {
+        // TODO: create a match expression to process the different message variants
+        // Remember: When passing a tuple as a function argument, you'll need extra parentheses:
+        // fn function((t, u, p, l, e))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_match_message_call() {
+        let mut state = State {
+            quit: false,
+            position: Point { x: 0, y: 0 },
+            color: (0, 0, 0),
+            message: "hello world".to_string(),
+        };
+        state.process(Message::ChangeColor(255, 0, 255));
+        state.process(Message::Echo(String::from("Hello world!")));
+        state.process(Message::Move(Point { x: 10, y: 15 }));
+        state.process(Message::Quit);
+
+        assert_eq!(state.color, (255, 0, 255));
+        assert_eq!(state.position.x, 10);
+        assert_eq!(state.position.y, 15);
+        assert_eq!(state.quit, true);
+        assert_eq!(state.message, "Hello world!");
+    }
+}
+```

@@ -1,20 +1,116 @@
+import { Callout } from "nextra/components"
+
 # Typy wyliczeniowe
 
 ## Definicja prostego wyliczenia
 
 1. Typ wyliczeniowy tworzony jest za pomocą słowa kluczowego `enum`:
     ```rust
+    #[derive(Debug)]
     enum UIEvent {
         ButtonClicked,
-        ScrollDown
+        Scroll
     }
     ```
 1. Utworzenie wartości wyliczenia:
     ```rust
-    let clicked = UIEvent::ButtonClicked;
-    let scroll = UIEvent::Scroll;
+    fn main() {
+        let clicked = UIEvent::ButtonClicked;
+        let scroll = UIEvent::Scroll;
+    }
+    ```
+1. Jeśli chcesz używać samych nazw poszczególnych wartości typu wyliczeniowego, możesz wprowadzić je do zakresu za pomocą instrukcji `use`:
+    ```rust
+    use UIEvent::*;
+
+    fn main() {
+        let clicked = ButtonClicked;
+        let scroll = Scroll;
+    }
+    ```
+1. Definicja metody, która operuje na wartościach typu wyliczeniowego:
+    ```rust
+    fn describe(event : UIEvent) {
+        println!("{:?}", event);
+    }
+    ```
+## Atrybuty i funkcje w typach wyliczeniowych
+
+1. Rozszerz wcześniejszy typ wyliczeniowy o nową wartość `KeyPressed`, która będzie przechowywać wartość oznaczającą przyisk, który został wciśnięty:
+    ```rust
+    #[derive(Debug)]
+    enum UIEvent {
+        ButtonClicked,
+        Scroll,
+        KeyPressed(char)
+    }
+    ```
+1. Utwórz zdarzenie nowego typu, a następnie wypisz je za pomocą metody `describe`:
+    ```rust
+    // in main function
+    let key_pressed = KeyPressed('b');
+    ```
+1. Typy wyliczeniowe można też komponować:
+    ```rust
+    #[derive(Debug)]
+    enum Direction {
+        Up,
+        Down
+    }
+
+    #[derive(Debug)]
+    enum UIEvent {
+        ButtonClicked,
+        Scroll(Direction),
+        KeyPressed(char)
+    }
+    ```
+1. Przenieś funkcja `describe` do bloku `impl` - funkcja ta będzie metodą typu wyliczeniowego:
+    ```rust
+    impl UIEvent {
+        fn describe(&self) {
+            println!("{:?}", self);
+        }
+    }
     ```
 
+<Callout type="info">
+Więcej informacji o typach wyliczeniowych znajdziesz na stronie: https://doc.rust-lang.org/book/ch06-00-enums.html
+</Callout>
+
+## Ćwiczenie
+
+Zdefiniuj typ wyliczeniowy `Message`, tak aby możliwe było utworzenie jego instancji jako podano w funkcji `main`:
+
+```rust
+#[derive(Debug)]
+enum Message {
+    // TODO: define the different variants used below
+}
+
+impl Message {
+    fn call(&self) {
+        println!("{:?}", self);
+    }
+}
+
+fn main() {
+    let messages = [
+        Message::Move { x: 10, y: 30 },
+        Message::Echo(String::from("hello world")),
+        Message::ChangeColor(200, 255, 255),
+        Message::Quit,
+    ];
+
+    for message in &messages {
+        message.call();
+    }
+}
+```
+
+*Źródło: rustlings*
 
 
-https://doc.rust-lang.org/rust-by-example/custom_types/enum.html
+
+
+
