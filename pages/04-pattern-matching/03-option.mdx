@@ -1,0 +1,174 @@
+import {Callout} from "nextra/components"
+
+# Typ `Option`
+
+1. Definicja typu oznaczającego wartość lub jej brak:
+    ```rust
+    enum Option<T> { // T depicts generic type 
+        Some(T),
+        None
+    }
+    ```
+1. Utworzenie wartości typu `Option`. W przypadku wartości pustej (`None`), konieczne jest zdefiniowanie typu, aby określić typ zawartości - kompilator nie może wydedukować tej informacji.
+    ```rust
+    fn main() {
+        let some_number = Some(5);
+        let some_text = Some(String::from("Some value in Option type"));
+
+        let no_value : Option<i32> = None;
+    }
+    ```
+1. Jaka jest różnica pomiędzy typem `Option` a pustą wartością typu `null`? Spróbuj wykonać poniższy kod:
+    ```rust
+    fn main() {
+        let x = Some(5);
+        let y = 10;
+
+        let sum = x + y;
+    }
+    ```
+
+<Callout type="info">
+Typ `Option` reprezentuje wartość opcjonalną: każda opcja jest albo typu `Some` i zawiera wartość, albo typu `None` i jej nie zawiera. Typy `Option` są bardzo powszechne w kodzie Rust, ponieważ mają wiele zastosowań:
+- Wartości początkowe
+- Wartości zwracane dla funkcji, które nie są zdefiniowane w całym zakresie wejściowym (funkcje częściowe)
+- Wartość zwracana w przypadku zgłaszania prostych błędów, gdzie w przypadku błędu zwracana jest wartość `None`.
+- Opcjonalne pola struktury
+- Pola struktury, które można pożyczyć lub "sprzedać"
+- Opcjonalne argumenty funkcji
+- Wskaźniki puste
+
+*Źródło: [Dokumentacja modułu `Option`](https://doc.rust-lang.org/std/option/)*
+</Callout>
+
+## Wyłuskanie wartości z `Option`
+
+1. Wyłuskanie wartości za pomocą konstrukcji `match`:
+    ```rust
+    fn increment(n : Option<i32>) -> Option<i32>{
+        match n {
+            Some(n) => Some(n + 1),
+            None => None
+        }
+    }
+
+    fn main() {
+        let n = increment(Some(5));
+    }
+    ```
+1. Wyłuskanie wartości za pomocą metod zglaszających błąd. 
+    ```rust
+    
+    fn main() {
+        let n : Option<i32> = Some(5);
+        let n : i32 = n.unwrap(); 
+
+        let m : Option<String> = Some(String::from("I use Option"));
+        let m : String = m.expect("This always should be a non empty String");
+
+        let argh : Option<String> = None;
+        let args = argh.unwrap(); // the program panics here
+    }
+    ```
+    <Callout type="warning">
+    Metody `expect` i `unwrap` powinny być używane tylko w celach testowych lub w sytuacji, gdy kontynuacja wykonania programu w przypadku braku wartości nie ma sensu.
+    </Callout>
+1. Jeśli wiesz jaka ma być domyślna wartość w przypadku braku wartości możesz wykorzystać metodę `unwrap_or`
+    ```rust
+    
+    fn main() {
+        assert_eq!(Some("car").unwrap_or("bike"), "car");
+        assert_eq!(None.unwrap_or("bike"), "bike");
+    }
+    ```
+1. Możesz również wykorzystać domyślną wartość zdefiniowaną dla danego typu (typ ten musi realizować cechę `Default`)
+    ```rust
+    
+    fn main() {
+        let x: Option<u32> = None;
+        let y: Option<u32> = Some(12);
+
+        assert_eq!(x.unwrap_or_default(), 0);
+        assert_eq!(y.unwrap_or_default(), 12);
+    }
+    ```
+
+## Operator `?`
+
+1. Napiszmy funkcję dodającą dwie liczby całkowite, które mogą być opcjonalne:
+    ```rust
+    fn sum(x : Option<i32>, y : Option<i32>) -> Option<i32> {
+        match (x, y) { // use tuple to avoid multiple matches
+            (Some(x), Some(y)) => Some(x + y),
+            _ => None
+        }
+    }
+    ```
+1. Napisz funkcję `main`, która przetestuje działanie funkcji sumującej dwie wartości opcjonalne
+1. Wykorzystaj operator `?` do uproszczenia powyższej funkcji:
+    ```rust
+    fn sum(x : Option<i32>, y : Option<i32>) -> Option<i32> {
+        Some(x? + y?)
+    }
+    ```
+
+## Ćwiczenia
+
+1. Napisz metodę `maybe_icecream`, która zwróci ile porcji lodów zostało w lodówce (w zależności od pory roku). Napraw również test `raw_value`, aby poprawnie sprawdzał ilość porcji.
+
+    ```rust
+    // This function returns how much icecream there is left in the fridge.
+    // If it's before 10PM, there's 5 scoops left. At 10PM, someone eats it
+    // all, so there'll be no more left :(
+    fn maybe_icecream(time_of_day: u16) -> Option<u16> {
+        // We use the 24-hour system here, so 10PM is a value of 22 and 12AM is a
+        // value of 0. The Option output should gracefully handle cases where
+        // time_of_day > 23.
+        // TODO: Complete the function body - remember to return an Option!
+        todo!()
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        #[test]
+        fn check_icecream() {
+            assert_eq!(maybe_icecream(0), Some(5));
+            assert_eq!(maybe_icecream(9), Some(5));
+            assert_eq!(maybe_icecream(18), Some(5));
+            assert_eq!(maybe_icecream(22), Some(0));
+            assert_eq!(maybe_icecream(23), Some(0));
+            assert_eq!(maybe_icecream(25), None);
+        }
+
+        #[test]
+        fn raw_value() {
+            // TODO: Fix this test. How do you get at the value contained in the
+            // Option?
+            let icecreams = maybe_icecream(12);
+            assert_eq!(icecreams, 5);
+        }
+    }
+    ```
+
+1. Napraw poniższy kod, bez usuwania żadnej z linii. Wyjaśnij dlaczego obecna wersja się nie kompiluje.
+
+    ```rust
+    struct Point {
+        x: i32,
+        y: i32,
+    }
+
+    fn main() {
+        let y: Option<Point> = Some(Point { x: 100, y: 200 });
+
+        match y {
+            Some(p) => println!("Co-ordinates are {},{} ", p.x, p.y),
+            _ => panic!("no match!"),
+        }
+        y; // Fix without deleting this line.
+    }
+    ```
+
+*Źródło: rustlings*
