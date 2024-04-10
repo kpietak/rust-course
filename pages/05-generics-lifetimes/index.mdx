@@ -1,0 +1,137 @@
+import {Callout} from 'nextra/components'
+
+# Typy generyczne
+
+Typy genereczne można wykorzystać w definicji sygnatur funkcji, struktur lub typów wyliczeniowych, które można następnie użyć z wieloma różnymi konkretnymi typami danych.
+
+
+## Typy generyczne w definicji struktury
+
+1. Zdefiniujmy strukturę zawierającą parę wartości tego samego typu:
+    ```rust
+    struct Pair<T> {
+        x: T,
+        y: T
+    }
+    ```
+    `T` oznacza dowolny typ. 
+1. Teraz możemy utworzyć np. parę liczb całkowitych lub zmiennoprzecinkowych:
+    ```rust
+    fn main() {
+        let pi = Pair{x : 5, y : 3};
+
+        let pf = Pair {x: 15f64, y : 12.0f64};
+    }
+    ```
+1. Ale nie możemy utworzyć pary złożonej z liczby całkowitej i rzeczywistej
+    ```rust
+    fn main() {
+        let pw = Pair {x: 15f64, y : 0}; // compile error; x & y must be the same type
+    }
+    ```
+1. Zdefiniuj parę, która może mieć wartości rożnego typu.
+
+
+## Typy generyczne w wyliczeniach
+
+1. Przykładem wykorzystania typów generycznych w wyliczenia jest wbudowany typ `Option`, który już poznaliśmy. Jego definicja wygląda nastepująco:
+    ```rust
+    enum Option<T> {
+        Some(T),
+        None
+    }
+1. Innym przykładem typu wyliczeniowego zawierającego typ generyczny, który będzie często wykorzystywany jest typ `Result`:
+    ```rust
+    enum Result<T, E> {
+        Ok(T),
+        Err(E)
+    }
+    ```
+
+## Typy generyczne w funkcjach i metodach
+
+1. Możemy również zdefiniować funkcje operujące na typach generycznych. Przed nami (na razie bez większego sensu) funkcja zwracająca pierwszą współrzędną z pary
+    ```rust
+    fn extract_x<T>(p : Pair<T>) -> T {
+        p.x
+    }
+    ```
+    Funkcja `exrtact_x` działa dla dowolnej pary i zwraca wartość typu generycznego. 
+    <Callout type="info">
+    Należy zwrócić uwagę, że podczas kompilacji, funkcja ta jest kompilowana dla każdego wykorzystywanego typu osobno. Przykładowo, jeśli funkcja ta zostanie wywołana z parą posiadającą liczby całkowite `i32`, to kompilator utworzy funkcję `fn extract_x(p : Pair<i32>) -> i32`.
+    </Callout>
+1. Możemy taką funkcję zamienić na metodę:
+    ```rust
+    impl <T> Pair<T> {
+        fn extract_x(self) -> T {
+            self.x
+        }
+    }
+    ```
+    Zwróć uwagę na umieszczenie definicji typów generycznych.
+1. Metody i funkcje możemy pisać również tylko dla określonych typów, np. dla liczb całkowitych
+    ```rust
+    impl Pair<i32> {
+        fn bigger(&self) -> i32 {
+            if self.x > self.y {
+                self.x
+            } else {
+                self.y
+            }
+        }
+    }
+    ```
+1. Sprawdź działanie metodty `bigger` na parze `pi` oraz `pf`.
+1. Spróbuj napisać metodę `bigger` dla dowolnego typu.
+
+## Granice cech
+
+1. Aby napisać metodę `bigger` trzeba ograniczyć zestaw typów, do tych posiadających możliwości porównania wartości (`PartialOrd`). W tym celu musimy zawęzić typ `T`:
+    ```rust
+    impl<T: PartialOrd> Pair<T> {
+        fn bigger(&self) -> T {
+            if self.x > self.y {
+                self.x
+            } else {
+                self.y
+            }
+        }
+    }
+    ```
+1. Czy kod się kompiluje? Dlaczego?
+1. Język Rust pozwala na definicję wielu ograniczeń dot. przyjmowanego typu, wykorzystujemy do tego operator `+` wykonywany na typie:
+    ```rust
+    impl<T: PartialOrd + Copy> Pair<T> {
+        fn bigger(&self) -> T {
+            if self.x > self.y {
+                self.x
+            } else {
+                self.y
+            }
+        }
+    }
+    ```
+
+1. W przypadku funkcji ograniczenia dla wielu typów zapisujemy w następujący sposób:
+    ```rust
+    fn some_function<T: Display + Clone, U : Debug + Clone>(t: T, u: U) -> i32 {
+        ...
+    }
+    ```
+1. Jeśli funkce posiadają wiele parametrów ograniczanych różnymi typami, możemy wykorzystać również bardziej przystępną składnię:
+    ```rust
+    fn some_function<T, U>(t: T, u: U) -> i32
+        where T : Display + Clone, 
+              U : Debug + Clone
+    {
+        ...
+    }
+    ```
+
+## Ćwiczenie
+
+1. Napisz funkcję `max`, która zwróci największą wartość tablicy zawierającej dowolne typy liczbowe. Funkcja powinna zwracać `Some(max)` lub `None` w przypadku pustej tablicy. 
+1. (\*) Napisz funkcję `mean`, która wyznaczy średnią arytmentyczną elementów tablicy zawierającej dowolne typy liczbowe. 
+1. Napisz funkcję dodawanie par liczbowych (struktur typu `Pair`).
+
+

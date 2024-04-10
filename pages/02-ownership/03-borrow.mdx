@@ -33,7 +33,7 @@ import {Callout} from 'nextra/components'
     }
 
     fn process_text(s: &String, len : usize ) {
-        s.truncate(e, len)
+        s.truncate(len)
     }
     ```
 1. Uruchom program i zastanów się na błędami kompilacji 
@@ -67,7 +67,15 @@ Uruchom kolejne fragmenty kodu i wyjaśnij, której reguły nie spełnia
 ```rust copy
 let mut s = String::from("sample");
 let s1 = &mut s;
-let s2 = s;
+let s2 = &mut s;
+
+println!("{}, {}", s1, s2);
+```
+
+```rust copy
+let mut s = String::from("sample");
+let s1 = &mut s;
+let s2 = &s;
 
 println!("{}, {}", s1, s2);
 ```
