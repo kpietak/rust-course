@@ -33,7 +33,7 @@ Zasady działania konstrukcji `match`?
 - `match` jest wyrażeniem, a więc może zwracać wartość; typ zwracanej wartości musi być wspólny dla wszystkich wariantów.
 </Callout>
 
-### Dopasowanie pozostałych wartości
+### Dopasowanie wartości
 
 1. Konstrukcja `match` może zostać wykorzystana również do dopasowania zwykłych wartości (nie tylko typów wyliczeniowych). Przykładem może być tutaj dopasowanie liczby. Należy jednak pamiętać, że musimy zapewnić dopasowanie wszystkich możliwych wartości. W tym celu, aby nie musieć pisać wszystkich wartości z osobna, można wykorzystać symbol `_`:
 
@@ -46,6 +46,92 @@ Zasady działania konstrukcji `match`?
             2 => println!("two"),
             3 => println!("three"),
             _ => println!("other number")
+        }
+    }
+    ```
+1. **Wzorce wielokrotne** pozwalają na dopasowanie do jednej operacji wielu wartości:
+    ```rust
+     fn main() {
+        let x = 2u8;
+
+        match x {
+            1 | 2 => println!("one or two"),
+            3 | 4 => println!("three or four"),
+            _ => println!("anything else"),
+        }
+    }  
+    ``` 
+
+1. **Dopasowanie zakresów** daje jeszcze większe możliwości dopasowania wartości
+    ```rust
+     fn main() {
+        let x = 2u8;
+
+        match x {
+            1..=9 => println!("easy"),
+            10..=99 => println!("medium"),
+            100_=999 => println!("large"),
+            _ => println!("anything else"),
+        }
+    }  
+    ``` 
+
+### Ekstrakcja / dekonstrukcja wartości
+
+1. Dopasowanie wzorców może zostać również wykorzystane do dekonstrukcji struktury i zdefiniowanie warunków dotyczących wartości jej atrybutów. Dekonstrukcja pozwala na wykorzystanie atrybutu bezpośrednio w bloku określającym operację wykonywana po dopasowaniu wzorca. Przykładowo, na poniższym fragmencie kodu zdefiniowano warunki dla struktury `Point`
+    ```rust
+    fn main() {
+        let p = Point { x: 0, y: 7 };
+
+        match p {
+            Point { x, y: 0 } => println!("On the x axis at {x}"),
+            Point { x: 0, y } => println!("On the y axis at {y}"),
+            Point { x, y } => {
+                println!("On neither axis: ({x}, {y})");
+            }
+        }
+    }
+    ```
+1. Możliwe jest również pominięcie atrybutów, które nie są istotne z punktu widzenia dopasowania wzorca
+    ```rust
+    fn main() {
+        struct Point {
+            x: i32,
+            y: i32,
+            z: i32,
+        }
+
+        let origin = Point { x: 0, y: 0, z: 0 };
+
+        match origin {
+            Point { x, .. } => println!("x is {}", x),
+        }
+    }
+    ```
+
+### Instrukcja warunkowa w dopasowaniu wzorca
+
+1. Reguły dopasowujace mogą dodatkowy warunek z wykorzystaniem instrukcji `if` (tzw. strażnik, *guard*)
+    ```rust
+    fn main() {
+        let num = Some(4);
+
+        match num {
+            Some(x) if x % 2 == 0 => println!("The number {} is even", x),
+            Some(x) => println!("The number {} is odd", x),
+            None => (),
+        }
+    }
+    ```
+1. Kombinacja strażnika z dopasowaniem wielokrotnym
+    ```rust
+    fn main() {
+        let x = 4;
+        let y = false;
+
+        match x {
+            4 | 5 | 6 if y => println!("yes"),
+            _ => println!("no"),
         }
     }
     ```
