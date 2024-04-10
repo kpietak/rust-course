@@ -25,6 +25,11 @@
     "type": "page",
     "display": "hidden"
   },
+  "05-generics-lifetimes": {
+    "title": "Typy generyczne i czas życia",
+    "type": "page",
+    "display": "hidden"
+  },
   "05-functions": {
     "title": "Funkcje",
     "type": "page",
@@ -69,6 +74,10 @@
       "04-pattern-matching": {
         "title": "4. Wyliczenia i dopasowanie wzorócw",
         "href": "/04-pattern-matching"
+      },
+      "05-generics-lifetimes": {
+        "title": "5. Typy generyczne i czas życia",
+        "href": "/05-generics-lifetimes"
       }
     }
   },
