@@ -80,7 +80,14 @@ Zasady działania konstrukcji `match`?
 
 1. Dopasowanie wzorców może zostać również wykorzystane do dekonstrukcji struktury i zdefiniowanie warunków dotyczących wartości jej atrybutów. Dekonstrukcja pozwala na wykorzystanie atrybutu bezpośrednio w bloku określającym operację wykonywana po dopasowaniu wzorca. Przykładowo, na poniższym fragmencie kodu zdefiniowano warunki dla struktury `Point`
     ```rust
+
+    struct Point {
+        x : i32,
+        y : i32
+    }
+
     fn main() {
+
         let p = Point { x: 0, y: 7 };
 
         match p {
@@ -160,7 +167,7 @@ Zasady działania konstrukcji `match`?
         }
     }
     ```
-1. Można (zarówno w konstrukcji `match` oraz `let if`) wzorzec może zawierać konkretne wartości:
+1. Zarówno w konstrukcji `match` oraz `let if` wzorzec może zawierać konkretne wartości:
     ```rust
     fn main() {
         let x = Some(2);
