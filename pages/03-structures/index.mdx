@@ -48,9 +48,9 @@ import {Callout} from 'nextra/components'
     fn main() {
         let r = Rectangle{x: 1.0, y: 2.0}; // create a new instance using constructor
 
-        println!{"{:?}", r};
+        println!("{:?}", r);
         
-        println("x: {}, y: {}", r1.x, r1.y); // access particular fields using . operator
+        println!("x: {}, y: {}", r.x, r.y); // access particular fields using . operator
     }
     ```
 1. Skompiluj kod i uruchom przykład:
@@ -61,8 +61,8 @@ import {Callout} from 'nextra/components'
 1. Możesz również utworzyć instancje na bazie innej instancji (poniższy kod dopisz do funkcji `main` z poprzedniego punktu)
     ```rust copy
     let r2 = Rectangle{x : 5, ..r1} // the rest of r2 parameters are copied from r1
-    println!{"{:?}", r};
-    println("x: {}, y: {}", r2.x, r2.y);
+    println!("{:?}", r);
+    println!("x: {}, y: {}", r2.x, r2.y);
     ```
 
 <Callout type="info">
