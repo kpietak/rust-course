@@ -1,0 +1,23 @@
+# Obsługa błędów nienaprawialnych 
+
+## Makro `panic!`
+
+1. Powyższy kod działa poprawnie, ale pozwala na stworzenie prostokąta o niepoprawnych (ujemnych) wartościach szerekości lub wysokości.  
+1. Załóżmy, że w przypadku, jeśli zaistnieje próba utworzenia "niepoprawnego" prostokąta, nie chcemy dalej kontynuować wykonania programu. W tym celu wykorzystamy makro `panic!`, która powoduje zatrzymanie przetwarzania programu i (domyślnie) zwinięcię stosu (program cofa się po stosie i czyści dane każdej funkcji, jaką napotka).
+1. Zmodyfikuj działanie metody `new`, aby dla nieprawidłowych parametrów zatrzymała przetwarzanie programu (`panic!();`).
+1. Dopisz test, który sprawdzi czy zachowanie jest ok - wykorzystaj dyrektywę `should_panic` do oznaczenia, że oczekiwanym wynikiem jest awaryjne wyjście z programu.
+    ```rust
+    #[test]
+    #[should_panic]
+    fn test_new_rectangle_with_negative() {
+        Rectangle::new(-1.0, 1.0);
+    }
+    ```
+1. Uruchom testy i sprawdź czy tworzenie prostokąta zachowuje się zgodnie z założeniami.
+    ```
+    running 2 tests
+    test tests::test_new_rectangle ... ok
+    test tests::test_new_rectangle_with_negative - should panic ... ok
+
+    test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+    ```
