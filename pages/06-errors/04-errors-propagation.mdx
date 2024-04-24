@@ -1,0 +1,156 @@
+
+# Propagacja błędów
+
+
+## Zwracanie błędów z funkcji
+
+1. Przypomnijmy w jaki sposób funkcja może zwracać wartość, która może zawierać błąd
+
+    ```rust
+    impl Rectangle {
+        fn new(width : f64, height : f64) -> Result<Rectangle, String> {
+            if width < 0.0 || height < 0.0 {
+                Err("Rectangle cannot have negative width or height".to_string())
+            } else {
+                Ok(Rectangle { width, height })
+            }
+        }
+    }
+    ```
+1. Napisz funkcję, która przyjmuje rozmiar dwóch prostokątów i sprawdza, który jest większy (ie. ma większą powierzchnię):
+    ```rust
+    fn bigger(w1: f64, h1 : f64, w2 : f64, h2 : f64) -> Result<Rectangle, String> {
+        let r1 = Rectangle::new(w1, h1);
+        let r2 = Rectangle::new(w2, h2);
+
+        match (r1, r2) {
+            (Ok(rec1), Ok(rec2)) => {
+                if rec1.area() > rec2.area() {
+                    Ok(rec1)
+                } else {
+                    Ok(rec2)
+                }
+            },
+            _ => Err("Rectangle cannot have negative width or height".to_string()),
+        }
+    }
+    ```
+1. Aby sprawdzić czy funkcja działa poprawnie napisz dwa proste testy jednostkowe
+    ```rust
+    #[test]
+    fn test_bigger() {
+        // given
+        let w1 = 1.0;
+        let h1 = 2.0;
+        let w2 = 3.0;
+        let h2 = 4.0;
+
+        // when
+        let r = bigger(w1, h1, w2, h2);
+
+        // then
+        assert!((r.unwrap().area() - (w2 * h2)).abs() < f64::EPSILON);
+    }
+
+    #[test]
+    fn test_bigger_err() {
+        // given
+        let w1 = 1.0;
+        let h1 = -2.0; // wrong width
+        let w2 = 3.0;
+        let h2 = 4.0;
+
+        // when
+        let r = bigger(w1, h1, w2, h2);
+
+        // then
+        assert!(r.is_err());
+    }
+    ```
+1. Uruchom i sprawdź czy kod jest poprawny.
+
+## Operator ?
+
+Metoda `bigger` może zostać uproszczona za pomocą operatora `?`, który działa podobnie jak w przypadku typu `Option`, tzn.: 
+- jeśli zostaje wywołany na wartości `Ok`, to zwraca wartość wynikową (enkapsulowaną przez `Ok`)
+- jeśli zostaje wywołany na wertości `Err`, to od razu wychodzi z bieżącej funkcji/metody i zwraca (propaguje) błąd
+    Operator `?` może być wykorzystany tylko i wyłącznie w funkcjach lub metodach, które zwracają typ `Result` oraz może być wywołany na wartościach, które posiadają zgodny typ błędu
+
+1. Przepisz metodę `bigger` z wykorzystaniem operatora `?`:
+    ```rust
+    fn bigger(w1: f64, h1 : f64, w2 : f64, h2 : f64) -> Result<Rectangle, String> {
+        let r1 = Rectangle::new(w1, h1)?;
+        let r2 = Rectangle::new(w2, h2)?;
+
+        if r1.area() > r2.area() {
+            Ok(r1)
+        } else {
+            Ok(r2)
+        }
+    }
+    ```
+1. Uruchom testy i sprawdź czy funkcja działa poprawnie
+
+## Obsługa błędów różnego typu
+
+1. Napiszmy funkcję, która z prostego pliku tekstowego przeczyta długość i szerokość prostokąta oraz utworzy jego instancję:
+    ```rust
+    fn read_from_file(path : &str) -> Result<Rectangle, ...> {
+        let s = fs::read_to_string(path)?;
+        let mut iter = s.split_whitespace();
+        let width : f64 = iter.next().ok_or("Cannot convert string to width".to_string())?.parse()?;
+        let height : f64 = iter.next().ok_or("Cannot convert string to height".to_string())?.parse()?;
+
+        Rectangle::new(width, height)
+
+    }
+    ```
+1. Metoda `read_to_string` zwraca błąd typu `io::Error`, z kolei metoda `Rectangle::new` zwraca błąd typu `String`. Sprawdź jakiego typu błędy zwraca metoda `ok_or` oraz `parse`. 
+1. W takim razie jakiego typu powinna być wartość zwracana przez metodę `read_from_file`? Jakiego typu powinien być błąd?
+1. Napisz test jednostkowy, który sprawdzi czy dla nieistniejącego pliku zostanie zwrócony błąd odpowiedniego typu (ie. `io::Error`)
+    ```rust
+    #[test]
+    fn test_read_from_not_existing_file() {
+        // given
+        let path = "not-existing-file.txt";
+
+        // when
+        let r = Rectangle::read_from_file(path);
+
+        // then
+        match r {
+            Err(ref e) if e.is::<std::io::Error>() => println!("ok"),
+            _ => panic!()
+        }
+    }
+    ```
+
+Obsługa dynamicznego typu jest problematyczna, ponieważ Rust nie dostarcza prostych mechanizmów sprawdzania aktualnego typu błędu, a tym samym obsługa ta sprowadza się zazwyczaj do wywołania zachowań wspólnych dla wszystkie rodzajów błędów (typu `std::error::Error`).
+
+
+## Biblioteka anyhow
+
+Aby odpowiedzieć na typowe problemy z obsługą błędów różnego typu, bibliotek *anyhow* wprowadza własną implementację typu `Result`, która domyślnie zawiera błąd typu `anyhow::Error`. Biblioteka ta dostarcza też makra umożliwiające tworzenie rezultatów (zawierających błędy) takich jak `anyhow!` i `bail!`.
+
+
+1. Zanim użyjesz biblioteki, dodaj do niej zależność w pliku `Cargo.toml`:
+    ```
+    [dependencies]
+    anyhow = "1.0"
+    ```
+1. Stosując bibliotekę *anyhow* metoda `read_from_file` wyglądałaby następująco:
+
+    ```rust
+    fn read_from_file(path : &str) -> Result<Rectangle> {
+            let s = fs::read_to_string(path)?;
+            let mut iter = s.split_whitespace();
+            let width : f64 = iter.next().ok_or(anyhow!("Cannot convert string to width"))?.parse()?;
+            let height : f64 = iter.next().ok_or(anyhow!("Cannot convert string to height"))?.parse()?;
+
+            Ok(Rectangle::new(width, height)?)
+
+        }
+    ```
+
+1. Aby kod się skompilował popraw metodę `new`, tak aby zwracała typ `anyhow::Result`. 
+1. Popraw też wszystkie testy, która przestały się wykonywać.

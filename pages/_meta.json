@@ -35,6 +35,11 @@
     "type": "page",
     "display": "hidden"
   },
+  "06-errors": {
+    "title": "Obsługa błędów",
+    "type": "page",
+    "display": "hidden"
+  },
   "06-collections": {
     "title": "Kolekcje",
     "type": "page",
@@ -49,12 +54,8 @@
     "title": "Programowanie asynchroniczne",
     "type": "page",
     "display": "hidden"
-  },
-  "09-errors": {
-    "title": "Obsługa błędów",
-    "type": "page",
-    "display": "hidden"
-  },
+  }
+  ,
   "menu": {
     "title": "Rozdziały",
     "type": "menu",
@@ -78,6 +79,10 @@
       "05-generics-lifetimes": {
         "title": "5. Typy generyczne i czas życia",
         "href": "/05-generics-lifetimes"
+      },
+      "06-errors": {
+        "title": "6. Obsługa błędów",
+        "href": "/06-errors"
       }
     }
   },

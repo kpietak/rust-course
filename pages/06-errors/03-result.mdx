@@ -1,0 +1,163 @@
+import {Callout} from 'nextra/components'
+
+# Błędy do naprawienia 
+
+## Wykorzystanie typu Option
+
+1. W naszym przypadku kończenie programu przy próbie utworzenia niewłaściwego prostokąta jest zachowaniem "na wyrost". Możemy przekazać informację funkcji wywołującej metodę `new`, że coś poszło nie tak, za pomocą typu `Option`.
+1. Zmodyfikuj metodę `new`, tak aby zwracała `Some<Rectangle>` dla poprawnych danych wejściowych oraz `None` dla liczb ujemnych.
+1. Zaktualizuje testy jednostkowe, aby sprawdzały działanie metody `new`.
+
+<Callout type="info">
+Typ `Option` jest wykorzystywany tylko do prostych sytuacji, w których spodziewamy się, że wynikiem funkcji lub metody może być pusta wartość (a powód otrzymania tej wartości jest oczywisty w danym kontekście). Typ `Option` nie zawiera żadnych informacji na temat problemu, który spowodował niepoprawne działanie programu.
+</Callout>
+
+
+## Obsługa błędów za pomocą Result
+
+Do obsługi typowych błędów Rust wprowadza typ `Result` zdefiniowany w następujący sposób:
+
+```rust
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}
+
+Typ `T` oznacza typ wartości zwracanej, z kolei typ `E` oznacza typ błędu zwracanego w przypadku niepowodzenia. 
+
+1. Zmodyfikuj metodę `new`, aby zwracała typ `Result`. W przypadku błędnych danych, metoda powinna zwrócić komunikat `Rectangle cannot have negative width or height`. Sygnatura metody `new` powinna wyglądać teraz następująco:
+    ```rust
+    fn new(width : f64, height : f64) -> Result<Rectangle, String> {
+        todo!()
+    }
+    ```
+1. Zaktualizuj testy jednostkowe, aby sprawdzały czy wynik jest poprawny oraz czy w przypadku błędu, komunikat jest zgodny.
+    ```rust
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        #[test]
+        fn test_new_rectangle() {
+            // given
+            let width = 4.5;
+            let height = 5.7;
+
+            // when
+            let r = Rectangle::new(width, height).unwrap();
+
+            // then
+            assert!((r.width - width).abs() < f64::EPSILON && (r.height - height).abs() < f64::EPSILON);
+        }
+
+        #[test]
+        fn test_new_rectangle_with_negative() {
+            let r = Rectangle::new(-1.0, 1.0);
+            match r {
+                Err(s) => assert_eq!("Rectangle cannot have negative width or height", s.as_str()),
+                Ok(_) => panic!() // the result shouldn't be Ok
+            }
+        }
+    }
+    ```
+1. Zwróć uwagę na zastosowanie metody `unwrap` - metoda ta zwraca wartość w typie `Ok` (czyli de facto rezultat), jeśli natomiast wartość zwracana jest type `Err`, to metoda panikuje.
+
+## Podstawowe metody typu `Result`
+
+Typ `Result` wprowadza szereg metod umożliwiających przyjazną obsługę błędów. Poniżej znajdziesz prezentację najważniejszych z nich, zilustrowanych za pomocą testów jednostkowych.
+
+### unwrap i expect
+
+Metody `unwrap` i `expect` - ektrakcja wartości poprawnych (generująca błędy nienaprawialne)
+
+```rust
+#[test]
+#[should_panic]
+fn test_unwrap() {
+    // that is ok
+    let r = Rectangle::new(1.0, 2.0);
+    let rec = r.unwrap(); // consumes the value
+
+    // that generates panic
+    let r = Rectangle::new(-1.0, 2.0);
+    let rec = r.unwrap(); // consumes the value
+
+}
+
+#[test]
+#[should_panic]
+fn test_expect() {
+    // that is ok
+    let r = Rectangle::new(1.0, 2.0);
+    let rec = r.expect("This should be always a proper rectangle");
+
+    // that generates panic
+    let r = Rectangle::new(1.0, -2.0);
+    let rec = r.expect("Don't do that!");
+}
+```
+
+### is_ok i is_err
+
+Metody `is_ok` i `is_err` - sprawdzanie rezultatu
+
+```rust
+#[test]
+fn test_is_ok() {
+    let r = Rectangle::new(1.0, 2.0);
+    assert!(r.is_ok());
+    assert!(!r.is_err());
+}
+```
+
+### unwrap_or_else
+
+Metoda `unwrap_or_else` - zwracanie wartości domyślnej (zdefiniowanej w danej sytuacji) w przypadku wystąpienia błędu
+
+```rust
+#[test]
+fn test_unwrap_or_else() {
+    let r = Rectangle::new(-1.0, -2.0);
+    let rec = r.unwrap_or_else(|_| Rectangle::new(DEFAULT_WIDTH, DEFAULT_HEIGHT).unwrap());
+
+    assert!((rec.width - DEFAULT_WIDTH).abs() < f64::EPSILON && (rec.height - DEFAULT_HEIGHT).abs() < f64::EPSILON);
+}
+```
+
+Uwaga: Zdefiniuj wcześniej stałe `DEFAULT_WIDTH` i `DEFAULT_HEIGHT`.
+
+### unwrap_or_default
+
+Metoda `unwrap_or_default` - zwracanie wartości domyślnej w przypadku wystąpienia błędu; typ `T` (w naszym przypadku `Rectangle`) musi implementować cechę `Default`
+
+Dodaj implementację cechy `Default`:
+```rust
+impl Default for Rectangle {
+    fn default() -> Self {
+        Rectangle{ width : DEFAULT_WIDTH, height : DEFAULT_HEIGHT }
+    }
+}
+```
+
+Teraz możesz wykorzystać metodę `unwrap_or_default:
+
+```rust
+#[test]
+fn test_unwrap_or_default() {
+    let r = Rectangle::new(-1.0, -2.0);
+    let rec = r.unwrap_or_default();
+
+    assert!((rec.width - DEFAULT_WIDTH).abs() < f64::EPSILON && (rec.height - DEFAULT_HEIGHT).abs() < f64::EPSILON);
+
+    let r = Rectangle::new(1.0, 2.0);
+    let rec = r.unwrap_or_default();
+    assert!((rec.width - 1.0).abs() < f64::EPSILON && (rec.height - 2.0).abs() < f64::EPSILON);
+}
+```
+
+<Callout type="info">
+Pełna dokumentacja typu `Result` wraz z opisem wszystkich metod znajduje się w dokumentacji Rust: https://doc.rust-lang.org/std/result/enum.Result.html
+</Callout>
+
+
+
