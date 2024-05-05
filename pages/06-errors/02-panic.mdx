@@ -2,7 +2,7 @@
 
 ## Makro `panic!`
 
-1. Powyższy kod działa poprawnie, ale pozwala na stworzenie prostokąta o niepoprawnych (ujemnych) wartościach szerekości lub wysokości.  
+1. Przedstawiony kod działa poprawnie, ale pozwala na stworzenie prostokąta o niepoprawnych (ujemnych) wartościach szerekości lub wysokości.  
 1. Załóżmy, że w przypadku, jeśli zaistnieje próba utworzenia "niepoprawnego" prostokąta, nie chcemy dalej kontynuować wykonania programu. W tym celu wykorzystamy makro `panic!`, która powoduje zatrzymanie przetwarzania programu i (domyślnie) zwinięcię stosu (program cofa się po stosie i czyści dane każdej funkcji, jaką napotka).
 1. Zmodyfikuj działanie metody `new`, aby dla nieprawidłowych parametrów zatrzymała przetwarzanie programu (`panic!();`).
 1. Dopisz test, który sprawdzi czy zachowanie jest ok - wykorzystaj dyrektywę `should_panic` do oznaczenia, że oczekiwanym wynikiem jest awaryjne wyjście z programu.
