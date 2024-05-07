@@ -30,18 +30,13 @@
     "type": "page",
     "display": "hidden"
   },
-  "05-functions": {
-    "title": "Funkcje",
-    "type": "page",
-    "display": "hidden"
-  },
   "06-errors": {
     "title": "Obsługa błędów",
     "type": "page",
     "display": "hidden"
   },
-  "06-collections": {
-    "title": "Kolekcje",
+  "07-collections": {
+    "title": "Kolekcje i domknięcia",
     "type": "page",
     "display": "hidden"
   },
@@ -83,6 +78,10 @@
       "06-errors": {
         "title": "6. Obsługa błędów",
         "href": "/06-errors"
+      },
+      "07-collections": {
+        "title": "7. Kolekcje i domknięcia",
+        "href": "/07-collections"
       }
     }
   },
