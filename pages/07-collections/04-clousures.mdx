@@ -1,0 +1,119 @@
+# Domknięcia
+
+## Literały funkcyjne
+
+1. Literały funkcyjne opisują sposób definiowania funkcji anonimowych (obiektów funkcyjnych), które mogą być później przypisane do zmiennych lub przekazane jak parametr wywowałania innej funkcji (tzw. funkcji wyższego rzędu). 
+1. Przykłady definicji funkcji anonimowej za pomocą literałów o różnym poziomie szczegółowości:
+    ```rust
+    let increment_v1 = |x: u32| -> u32 { x + 1 };
+    let increment_v2 = |x| { x + 1 };
+    let increment_v3 = |x| x + 1; // only if there is only one expression
+
+    assert_eq!(increment_v1(4), 5); // calling functional object
+    assert_eq!(increment_v2(4), 5);
+    assert_eq!(increment_v3(4), 5);
+    ```
+1. Skąd Rust "wie" jakiego typu argumenty przyjmują literały funkcyjne? Spróbuj zakomentować ostatnie linie i zobaczyć wyniki kompilacji.
+
+## Domknięcia
+1. Domknięcie (ang. *clousure*) pozwala w funkcji anonimiowej wykorzystać kontekst, w którym jest ona tworzona. Kontekst ten jest przechowywany w obiekcie funkcyjnym (pożyczany przez obiekt funkcyjny). 
+    ```rust
+    let mut x = 5;
+    let mul_5 = |a| a * x;
+
+    assert_eq!(mul_5(4), 20);
+    ```
+1. Domknięcie może również modyfikować wartości zapożyczone z kontekstu (w takim wypadku mówimy o mutowalnej pożyczce)
+    ```rust
+    let mut x = 5;
+    let mut add_to_x = |a| x += a;
+
+    add_to_x(5);
+    add_to_x(1);
+    assert_eq!(x, 11);
+
+    x += 1;
+    assert_eq!(x, 12);
+    ```
+1. Do domknięcia można przenieść również własność wartości, która ma być pobrana z kontekstu
+    ```rust
+    let mut x = vec![1, 2, 3];
+    let equal_to_x = move |y| y == x;  // equal_to_x becomes the owner of x
+
+    // println!("can't use x here: {:?}", x);
+
+    let y = vec![1, 2, 3];
+    assert!(equal_to_x(y));
+    ```
+
+## Iterator 
+
+Domknięcia wykorzystywane są najczęściej wraz z iteratorami do efektywnego przetwarzania elementów z kolekcji. 
+Cecha [Iterator](https://doc.rust-lang.org/std/iter/trait.Iterator.html) definiuje szereg metod umożliwiających pracę na kolejnych elementach produkowanych przez iterator. W języku Rust iteratory są leniwe, co oznacza, że nie dają żadnego efektu, dopóki nie wywołamy metod, które "zużywają” iterator.
+
+1. Podstawowy interfejs iteratora pozwala na przechodzenie do kolejnych jego elementów za pomocą metody `next`:
+    ```rust
+    let v = vec![1, 2, 3];
+    let mut iter = v.iter(); // must be mutable
+
+    assert_eq!(Some(&1), iter.next());
+    assert_eq!(Some(&2), iter.next());
+    assert_eq!(Some(&3), iter.next());
+    assert_eq!(None, iter.next());
+    ```
+    Metoda ta zwraca typ `Option`, który w przypadku wartości `Some` zawiera wskaźnik (pożyczkę), na element iteratora. 
+1. **Konsumpcja iteratora:** w interfejsie iteratora wyróżniamy metody, które uruchamiają przetwarzanie kolejnych elementów. Metody te "zużywają" iteratora, co w praktyce oznacza, że przejmują własność do instancji iteratora, a w konsekwencji po ich wywołaniu, nie można się odwołać ponownie do iteratora. Do tego typu metod należą:
+    - `collect`,
+    - `sum`,
+    - `count`
+    ```rust
+    let v = vec![1, 2, 3];
+    let iter = v.iter();
+    assert_eq!(6, iter.sum()); // consumes the iterator
+
+    let v = vec![1, 2, 3];
+    assert_eq!(3, v.iter().count()); // consumes the iterator
+
+    let a = [1, 2, 3];
+    let v = a.iter().collect::<Vec<_>>(); // turbofish syntax
+    assert_eq!(&1, *v.get(0).unwrap()); // :>
+    ```
+1. Znajdź w dokumentacji cechy `Iterator` inne metody, które konsumują interator. Czym charakteryzują się te metody?
+1. **Metody przetwarzające** elementy iteratora, to metody, które pozwalają przekształcić poszczególne elementy, które produkuje iterator. Do najczęściej używanych metod tego typu należą:
+    - `map`,
+    - `filter`,
+    - `flat_map`,
+    - `zip`.
+    ```rust
+    let v = vec![1, 2, 3];
+    // transforming each element
+    let res = v.iter().map(|x| x * 2).collect::<Vec<i32>>();
+    assert_eq!(vec![2, 4, 6], res);
+
+    // filter elements
+    let res = v.iter().filter(|&x| *x % 2 == 0).map(|x| *x).collect::<Vec<i32>>();
+    assert_eq!(vec![2], res);
+    ```
+1. **Metody tworzące iterator** to metody wywoływane na kolekcjach, które tworzą nową instancję iteratora zwracającego elementy danej kolekcji. Wyróżnia się 3 metody kreacyjne:
+    - Metoda `iter` - tworzy nowy iterator, który pożycza niemutowalne wartości kolekcji
+    - Metoda `iter_mut` - tworzy iterator, który pożycza mutowalne wartości kolekcji
+    - Metoda `into_iter` - tworzy iterator, który przejmuje własność kolekcji (np. wektora), na którym tworzony jest iterator
+
+    Przykład użycia metody `iter_mut`:
+    ```rust
+    let mut v = vec![1, 2, 3];
+
+    v.iter_mut().map(|x| *x +=1).collect::<Vec<_>>();
+    assert_eq!(vec![2, 3, 4], v);
+    ```
+
+    Przykład użycia metody `into_iter`:
+    ```rust
+    let v = vec![1, 2, 3];
+    let v2 = v.into_iter().map(|x | x * 2).collect::<Vec<_>>();
+
+    // v.get(0); // cannot use v anymore - it's moved
+
+    assert_eq!(vec![2, 4, 6], v2);
+    ```
+
