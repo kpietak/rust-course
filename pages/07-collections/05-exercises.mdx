@@ -1,0 +1,85 @@
+# Ćwiczenia
+
+## Statystyki F1
+
+Celem zadania jest pobranie przykładowych danych dotyczących wyścigów F1 z serwisu https://openf1.org/ oraz wczytanie ich do kolekcji. a następnie, z wykorzystaniem iteratorów i domknięć, policzenie podstawowych statystyk.
+
+### Przygotowanie
+
+1. Utwórz nowy projekt poleceniem `cargo new`.
+1. W pliku `Cargo.toml` dodaj następujące zależności:
+    ```
+    [dependencies]
+    anyhow = "1.0"
+    chrono = { version = "0.4", features = ["serde"] }
+    reqwest = { version = "0.12", features = ["blocking"] }
+    serde = { version = "1.0", features = ["derive"] }
+    serde_json = "1.0"
+    ```
+1. W zadaniu wykorzystamy dane na temat parametrów samochodów w poszczególnych sesjach i wyścigach, które można pobrać z usługi https://api.openf1.org/v1/car_data. Dokumentacja usługi znajduje się na stronie: https://openf1.org/#car-data.
+1. W pliku `main.rs` dodaj kod odpowiedzialny za model danych, odzwierciedlający dane z API oraz wykorzystamy bibliotekę `serde` do serializacji i deserializacji. 
+    ```rust
+    use std::fs::File;
+    use std::io::{BufReader, BufWriter};
+    use std::path::Path;
+    use chrono::{DateTime, Utc};
+    use serde::{Deserialize, Serialize};
+    use anyhow::Result;
+
+    const DATA_FILE : &str = "data.json";
+
+    const API_QUERY : &str = "https://api.openf1.org/v1/car_data?driver_number=55&session_key=9159";
+
+    #[derive(Serialize, Deserialize)]
+    struct CarData {
+        brake : u32,
+        date: DateTime<Utc>,
+        driver_number: u32,
+        drs: u8,
+        meeting_key: u32,
+        n_gear: u8,
+        rpm: u32,
+        session_key: u32,
+        speed: u32,
+        throttle: u8
+    }
+
+    ```
+1. Dodaj funkcje do pobierania i zapisu danych do pliku oraz funkcję uruchomieniową:
+    ```rust
+    
+    fn fetch_car_data(url: &str, data_file : &str) -> Result<()> {
+        let data = reqwest::blocking::get(url)?.text()?;
+        let car_data : Vec<CarData> = serde_json::from_str(&data)?;
+        let writer = BufWriter::new(File::create(data_file)?);
+        serde_json::to_writer(writer, &car_data)?;
+        Ok(())
+    }
+
+    fn load_car_data_from_file(data_file : &str) -> Result<Vec<CarData>> {
+        let car_data : Vec<CarData> = serde_json::from_reader(BufReader::new(File::open(data_file)?))?;
+        Ok(car_data)
+    }
+
+    fn check_if_data_exists(data_file : &str) -> bool {
+        Path::new(data_file).exists()
+    }
+
+    fn main() -> Result<()> {
+
+        if !check_if_data_exists(DATA_FILE) {
+            fetch_car_data(API_QUERY, DATA_FILE)?;
+        }
+
+        let car_data = load_car_data_from_file(DATA_FILE).unwrap();
+
+        Ok(())
+    }
+
+    ```
+
+### Zadania 
+
+1. Napisz funkcję `avarage`, która wylicza średnią szybkość kierowcy w danej sesji.
+1. Napisz funkcję `high_speed`, która oblicza szacunkowy czas, kiedy kierowca jechał szybciej niż zadana szybkość.
+1. Napisz funkcję `max_rpm`, która wyznaczy maksymalną liczbę obrotów silnika (`rpm`) oraz na jakim biegu została osiągnięta ta wartość.
