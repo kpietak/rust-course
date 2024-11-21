@@ -1,4 +1,4 @@
-{
+export default {
   "index" : "Wprowadzenie",
   "02-vecs": "Wektory",
   "03-maps" : "Mapy",
