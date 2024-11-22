@@ -1,4 +1,4 @@
-{
+export default {
   "index": "Wprowadzenie",
   "02-move": "Przenoszenie własności",
   "03-borrow": "Referencje i pożyczki",

@@ -8,13 +8,13 @@ const config: DocsThemeConfig = {
   },
   docsRepositoryBase: 'https://github.com/kpietak/rust-course/tree/main',
   editLink : {
-    text: null
+    content: null
   },
   feedback: {
     content: 'Zauważyłeś błąd, masz pomysł co poprawić - zgłoś propozycję!'
   },
   footer: {
-    text: 'Programowanie w języku Rust',
+    content: 'Programowanie w języku Rust',
   },
 }
 
