@@ -4,7 +4,7 @@
   "description": "Introduction to programming in Rust",
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next export",
+    "build": "next build",
     "start": "next start"
   },
   "author": {
@@ -12,7 +12,7 @@
     "email": "kpietak@agh.edu.pl"
   },
   "dependencies": {
-    "next": "^13.5.6",
+    "next": "^15.0.1",
     "nextra": "^3.2.4",
     "nextra-theme-docs": "^3.2.4",
     "react": "^18.2.0",
