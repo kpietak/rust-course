@@ -59,12 +59,10 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock', '**/pnpm-lock.yaml') }}-
       - name: Install dependencies
         run: pnpm install
-      - name: Build with Next.js
-        run: pnpm next build
-      - name: Static HTML export with Next.js
+      - name: Build site with Next.js
         run: |
-          pnpm next export
-          touch out/.nojekyll
+          pnpm build
+          touch out/.nojekyll    
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
