@@ -36,7 +36,5 @@ export default {
         title: "Programowanie asynchroniczne",
         type: "page",
         "display": "hidden"
-      }
-      ,
-  
+      }  
 }
