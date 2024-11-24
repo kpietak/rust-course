@@ -12,15 +12,15 @@
     "email": "kpietak@agh.edu.pl"
   },
   "dependencies": {
-    "next": "^15.0.1",
+    "next": "^15.0.3",
     "nextra": "^3.2.4",
     "nextra-theme-docs": "^3.2.4",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "@types/react": "^18.2.23",
-    "typescript": "^5.7.0"
+    "@types/node": "^22.9.3",
+    "@types/react": "^18.3.12",
+    "typescript": "^5.7.2"
   }
 }
