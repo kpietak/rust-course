@@ -8,7 +8,7 @@ const nextConfig = {
     unoptimized: true
   },
   trailingSlash: true,
-  basePath: '/rust-course'
+  // basePath: '/rust-course'
 }
 
 const withNextra = nextra({
