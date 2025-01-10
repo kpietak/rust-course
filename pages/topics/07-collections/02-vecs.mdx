@@ -40,7 +40,7 @@
 
 ## Iteracja po elementach wektora
 
-W przeciwieństwie do innych języków programowania, w Rust wyróżniamy 3 rodzaje iteracji do po elementach wektora, które związane są, a jakże, z własnością i pożyczaniem wartości.
+W przeciwieństwie do innych języków programowania, w Rust wyróżniamy 3 rodzaje iteracji po elementach wektora, które związane są, a jakże, z własnością i pożyczaniem wartości.
 
 1. Iteracja po elementach, podobnie jak dopasowanie wzorca, konsumuje wartość, dlatego iterowanie bezpośrednio po wektorze spowoduje, że po zakończeniu iteracji wektor nie będzie już dostępny pod tą zmienną (własność zostanie przeniesione do wnętrza pętli) i prawdopodobnie (jeśli sama wartość nie zostanie zwrócona), wektor po wykonaniu pętli zostanie usunięty.
     ```rust
