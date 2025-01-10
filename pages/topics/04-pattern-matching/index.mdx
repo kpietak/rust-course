@@ -36,7 +36,7 @@ import { Callout } from "nextra/components"
     ```
 ## Atrybuty i funkcje w typach wyliczeniowych
 
-1. Rozszerz wcześniejszy typ wyliczeniowy o nową wartość `KeyPressed`, która będzie przechowywać wartość oznaczającą przyisk, który został wciśnięty:
+1. Rozszerz wcześniejszy typ wyliczeniowy o nową wartość `KeyPressed`, która będzie przechowywać wartość oznaczającą przycisk, który został wciśnięty:
     ```rust
     #[derive(Debug)]
     enum UIEvent {
@@ -65,7 +65,7 @@ import { Callout } from "nextra/components"
         KeyPressed(char)
     }
     ```
-1. Przenieś funkcja `describe` do bloku `impl` - funkcja ta będzie metodą typu wyliczeniowego:
+1. Przenieś funkcję `describe` do bloku `impl` - funkcja ta będzie metodą typu wyliczeniowego:
     ```rust
     impl UIEvent {
         fn describe(&self) {
