@@ -27,7 +27,7 @@ Podczas tworzenia nowego projektu za pomocą `cargo`, automatycznie inicjowane j
 
 Plik `Cargo.toml` jest plikiem konfiguracyjnym używanym przez Cargo do zarządzania projektem Rust. Zawiera informacje o projekcie, takie jak jego nazwa, wersja, autorzy oraz zależności do innych bibliotek.
 
-#### Przykładowy plik Cargo.toml
+**Przykładowy plik Cargo.toml**
 
 ```toml
 [package]
@@ -41,7 +41,7 @@ serde = "1.0"
 rand = { version = "0.8", features = ["small_rng"] }
 ```
 
-#### Definiowanie zależności
+**Definiowanie zależności**
 
 Zależności do bilbiotek Rusta są definiowane w sekcji `[dependencies]`, gdzie poza nazwą można określić wersję biblioteki, a także dodatkowe opcje, takie jak `features`.
 
@@ -56,6 +56,14 @@ Zależności do bilbiotek Rusta są definiowane w sekcji `[dependencies]`, gdzie
     ```toml
     rand = { version = "0.8", features = ["small_rng"] }
     ```
+
+<Callout type="info">
+Więcej informacji na temat pliku `Cargo.toml` znajdziesz w oficjalnej dokumentacji: https://doc.rust-lang.org/cargo/reference/manifest.html
+</Callout>
+
+<Callout type="info">
+Skatalogowane biblioteki wraz z wyszukiwarką znajdziesz na stronie: https://lib.rs, możesz również skorzystać z oficjalnego rejestru opublikowanych bibliotek dostępnych na stronie: https://crates.io.
+</Callout>
 
 ### Kompilowanie i uruchamianie projektu
 
