@@ -1,0 +1,44 @@
+
+## Zadanie: Sprawdzanie poprawności planszy Sudoku
+
+### Zasady gry Sudoku
+
+Sudoku to gra logiczna, której celem jest wypełnienie 9x9 planszy cyframi od 1 do 9 w taki sposób, aby każda kolumna, każdy wiersz oraz każde z dziewięciu "małych" kwadratów 3x3 zawierały wszystkie cyfry od 1 do 9 bez powtórzeń.
+
+### Opis zadania
+
+Twoim zadaniem jest napisanie funkcji `check_sudoku_board`, która sprawdza poprawność planszy sudoku. Funkcja powinna przyjmować planszę jako dwuwymiarową tablicę liczb całkowitych i zwracać wartość logiczną `true` jeśli plansza jest poprawna, lub `false` w przeciwnym razie.
+
+```rust
+fn check_sudoku_board(board: [[u8; 9]; 9]) -> bool {
+    todo!()
+}
+```
+
+**Opcjonalnie**:  Napisz testy jednostkowe sprawdzające poprawność działania funkcji, wykorzystując przykładowe plansze sudoku. Sprawdź również przypadki brzegowe, takie jak plansze zawierające błędne wartości. Więcej o testach dowiesz się w sekcji [Testy jednostkowe](/topics/01-intro/add-02-unit-tests).
+
+### Przykładowa plansza sudoku
+
+Plansza sudoku jest reprezentowana jako dwuwymiarowa tablica liczb całkowitych. Puste pola są oznaczone jako `0`.
+
+```rust
+let board = [
+    [5, 3, 0, 0, 7, 0, 0, 0, 0],
+    [6, 0, 0, 1, 9, 5, 0, 0, 0],
+    [0, 9, 8, 0, 0, 0, 0, 6, 0],
+    [8, 0, 0, 0, 6, 0, 0, 0, 3],
+    [4, 0, 0, 8, 0, 3, 0, 0, 1],
+    [7, 0, 0, 0, 2, 0, 0, 0, 6],
+    [0, 6, 0, 0, 0, 0, 2, 8, 0],
+    [0, 0, 0, 4, 1, 9, 0, 0, 5],
+    [0, 0, 0, 0, 8, 0, 0, 7, 9]
+];
+```
+
+### Wymagania
+1. Sprawdź, czy wszystkie pola zawierają cyfry z przedziału od 0 do 9.
+1. Sprawdź, czy każda kolumna zawiera unikalne cyfry od 1 do 9.
+2. Sprawdź, czy każdy wiersz zawiera unikalne cyfry od 1 do 9.
+3. Sprawdź, czy każde z dziewięciu "małych" kwadratów (3x3) zawiera unikalne cyfry od 1 do 9.
+
+

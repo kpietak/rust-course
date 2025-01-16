@@ -1,0 +1,111 @@
+import {Callout} from 'nextra/components'
+
+## Główne funkcje narzędzia Cargo
+
+Cargo to narzędzie do zarządzania projektami w języku Rust. Umożliwia tworzenie nowych projektów, kompilowanie kodu, zarządzanie zależnościami oraz uruchamianie testów.
+
+### Tworzenie nowego projektu
+
+Aby utworzyć nowy projekt dla języka Rust, użyj polecenia:
+
+```bash
+cargo new sample_project
+```
+
+To polecenie utworzy nowy katalog o nazwie `sample_project` z podstawową strukturą projektu Rust. Konfiguracja projektu znajduje się pliku `Cargo.toml`, opisanym poniżej.
+
+Domyślnie `cargo` tworzy projekt binarny, czyli projekt z plikiem wykonywalnym. Natomiast
+jeśli chcesz utworzyć projekt biblioteki, użyj flagi `--lib`, która utworzy projekt dostarczający funkcje do wykorzystania w innych bibliotekach lub programach.
+
+```bash
+cargo new --lib sample_library
+```
+
+Podczas tworzenia nowego projektu za pomocą `cargo`, automatycznie inicjowane jest nowe repozytorium Git. Możesz to wyłączyć, dodając flagę `--vcs none`:
+
+### Podstawowa struktura pliku Cargo.toml
+
+Plik `Cargo.toml` jest plikiem konfiguracyjnym używanym przez Cargo do zarządzania projektem Rust. Zawiera informacje o projekcie, takie jak jego nazwa, wersja, autorzy oraz zależności do innych bibliotek.
+
+#### Przykładowy plik Cargo.toml
+
+```toml
+[package]
+name = "sample_project"
+version = "0.1.0"
+authors = ["Author <email@example.com>"]
+edition = "2021"
+
+[dependencies]
+serde = "1.0"
+rand = { version = "0.8", features = ["small_rng"] }
+```
+
+#### Definiowanie zależności
+
+Zależności do bilbiotek Rusta są definiowane w sekcji `[dependencies]`, gdzie poza nazwą można określić wersję biblioteki, a także dodatkowe opcje, takie jak `features`.
+
+1. Prosta zależność z określoną wersją:
+
+```toml
+serde = "1.0"
+```
+
+2. Zależność z dodatkowymi opcjami:
+
+```toml
+rand = { version = "0.8", features = ["small_rng"] }
+```
+
+### Kompilowanie i uruchamianie projektu
+
+Aby skompilować projekt, przejdź do katalogu projektu i użyj polecenia:
+
+```bash
+cargo build
+```
+
+Aby skompilować i uruchomić projekt jednocześnie, użyj polecenia:
+
+```bash
+cargo run
+```
+
+### Formatowanie kodu
+
+Cargo umożliwia również automatyczne formatowanie kodu za pomocą narzędzia `rustfmt`. Aby sformatować kod, użyj polecenia:
+
+```bash
+cargo fmt
+```
+
+### Analiza kodu za pomocą Clippy
+
+[Clippy](https://github.com/rust-lang/rust-clippy) to narzędzie do analizy kodu, które pomaga znaleźć potencjalne błędy i poprawić jakość kodu. Aby uruchomić Clippy, użyj polecenia:
+
+```bash
+cargo clippy
+```
+
+### Tworzenie projektu z szablonu
+
+[Cargo-generate](https://cargo-generate.github.io/cargo-generate/) to wtyczka, która umożliwia tworzenie nowych projektów na podstawie szablonów. Aby zainstalować cargo-generate, użyj polecenia:
+
+```bash
+cargo install cargo-generate
+```
+
+Aby utworzyć nowy projekt na podstawie szablonu, użyj polecenia:
+
+```bash
+cargo generate --git https://github.com/rust-github/template
+```
+
+Powyższy szablon utworzy nowy projekt dostosowany do repozytorium GitHub (z dodatkowymi informacji i szablonami oraz konfiguracją ciagłej integracji). Więcej informacji o szablonie znajdziesz na stronie https://rust-github.github.io.
+
+<Callout type="info">
+Lista dostępnych szablonów znajduje się na stronie https://github.com/cargo-generate/cargo-generate/blob/main/TEMPLATES.md lub pod hashtagiem cargo-generate na GitHubie: https://github.com/topics/cargo-generate.
+</Callout>
+
+
+
