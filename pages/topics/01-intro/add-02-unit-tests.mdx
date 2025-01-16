@@ -1,0 +1,64 @@
+import {Callout} from 'nextra/components'
+
+## Tworzenie testów jednostkowych
+
+W języku Rust testy jednostkowe są (zazwyczaj) umieszczane w tym samym pliku co kod źródłowy, który testują. Testy umieszczane są w specjalnym module testowym, który jest oznaczony adnotacją `#[cfg(test)]`. Każdy test umieszczany jest w osobnej funkcji, która jest oznaczona adnotacją `#[test]`.
+
+<Callout type="info">
+O organizacji kodu w ramach modułów dowiesz się więcej w trakcie przyszłych zajęć. Na razie skupmy się na nauce tworzenia testów jednostkowych.
+</Callout>
+
+### Przykładowy test jednostkowy
+
+Poniżej znajduje się przykładowa funkcji `sum_array` , która sumuje elementy tablicy liczb całkowitych, oraz przykładowe testy jednostkowe.
+
+```rust
+// Funkcja sumująca elementy tablicy
+fn sum_array(arr: &[i32]) -> i32 {
+    arr.iter().sum()
+}
+
+// Moduł testowy
+#[cfg(test)]
+mod tests {
+    // Importowanie wszystkiego z zewnętrznego zakresu
+    use super::*;
+
+    // Przykładowy test jednostkowy
+    #[test]
+    fn test_sum_sample_array() {
+        let arr = [1, 2, 3, 4, 5];
+        assert_eq!(sum_array(&arr), 15);
+    }
+
+    // Przykładowy test jednostkowy / przypadek brzegowy
+    #[test]
+    fn test_sum_empty_array() {
+        let arr : [i32; 0] = [0; 0];
+        assert_eq!(sum_array(&arr), 0);
+    }
+}
+```
+
+### Uruchamianie testów
+
+Aby uruchomić testy jednostkowe, użyj polecenia:
+
+```bash
+cargo test
+```
+
+Polecenie to skompiluje projekt i uruchomi wszystkie testy jednostkowe, wyświetlając wyniki w terminalu.
+
+Poniżej znajduje się przykładowy wynik uruchomienia testu:
+
+```bash
+running 1 test
+test tests::test_sum_array ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+```
+
+<Callout type="info">
+Dla pojedynczego pliku testy jednostkowe możesz również uruchomić w [Rust Playground](https://play.rust-lang.org/).
+</Callout>

@@ -1,0 +1,93 @@
+
+## Zadanie: Gra w Kółko i Krzyżyk
+
+### Opis zadania
+
+Twoim zadaniem jest stworzenie gry w kółko i krzyżyk (Tic-Tac-Toe) w języku Rust, która będzie uruchamiana w terminalu. Gra ma pozwalać dwóm graczom na rozgrywkę na planszy o wymiarach 3x3, w której gracze na przemian będą umieszczać swoje symbole (X lub O) w pustych polach, aż do momentu, gdy jeden z graczy wygra lub zakończy się remis.
+
+### Wymagania
+
+1. **Reprezentacja planszy:**
+   - Gra powinna wyświetlać planszę w formie 3x3. Każde pole na planszy może być puste lub zawierać symbol gracza (X lub O).
+   - Plansza powinna być reprezentowana jako tablica.
+
+1. **Interfejs użytkownika:**
+   - Gra powinna umożliwiać dwóm graczom wybór pozycji na planszy. Gracze wybierają numer pola (dla uproszczenia jedna liczba w zakresie od 1 do 9), które chcą zająć.
+   - Po każdej turze należy wyświetlić zaktualizowaną planszę.
+   - Gra powinna obsługiwać komunikaty o błędach, np.:
+     - Próba zajęcia już zajętego pola.
+     - Wprowadzenie nieprawidłowego numeru pola.
+
+1. **Zasady gry:**
+   - Gracze naprzemiennie wykonują ruchy (pierwszy gracz to "X", drugi gracz to "O").
+   - Gra kończy się w momencie, gdy jeden z graczy wygra (trzy symbole w linii poziomej, pionowej lub na przekątnej), albo gdy wszystkie pola zostaną zajęte, co kończy się remisem.
+   - Program powinien poinformować o zwycięzcy lub remisie.
+
+1. **Kontrola przebiegu gry:**
+   - Gra powinna sprawdzać, czy któryś z graczy wygrał po każdym ruchu.
+   - W przypadku remisu, kiedy wszystkie pola są zajęte, gra kończy się remisem.
+
+1. **Struktura programu:**
+   - Gra powinna być podzielona na funkcje (np. funkcja do rysowania planszy, funkcja do sprawdzania wygranej, funkcja do wykonania ruchu, itp.), aby kod był czytelny i zorganizowany.
+
+1. **Wykorzystanie projektu:**
+    - Gra powinna być zaimplementowana jako projekt Cargo.
+    - Kod powinien być zapisany w pliku `main.rs`.
+
+1. **Opcjonalnie:**
+   - Możliwość wyboru, który gracz zaczyna grę (X lub O).
+   - Po zakończeniu gry wyświetlenie komunikatu o zakończeniu rozgrywki i możliwość rozpoczęcia nowej gry.
+
+### Przykładowa interakcja z użytkownikiem
+
+```
+Gracz 1 (X), Twój ruch (wprowadź numer pola od 1 do 9): 5
+
+Plansza:
+1 | 2 | 3
+---------
+4 | X | 6
+---------
+7 | 8 | 9
+
+Gracz 2 (O), Twój ruch (wprowadź numer pola od 1 do 9): 1
+
+Plansza:
+O | 2 | 3
+---------
+4 | X | 6
+---------
+7 | 8 | 9
+
+Gracz 1 (X), Twój ruch (wprowadź numer pola od 1 do 9): 9
+
+Plansza:
+O | 2 | 3
+---------
+4 | X | 6
+---------
+7 | 8 | X
+
+... // kolejne ruchy
+
+
+Gracz 1 (X) wygrał!
+```
+
+### Wskazówki
+
+Do wczytywania poleceń od użytkownika wykorzystaj następujący kod:
+
+```rust copy
+use std::io;
+
+fn main() {
+    let mut user_input = String::new();
+    let mut cmd : char; // place for the command
+
+    println!("Type your command:");
+    let _ = io::stdin().read_line(&mut user_input); // get string from the user input
+    cmd = user_input.chars().nth(0).unwrap(); // get the first char from the given string
+    
+}
+```
