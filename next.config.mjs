@@ -1,6 +1,5 @@
 import nextra from 'nextra'
 
-
 const nextConfig = {
   output: 'export',
   reactStrictMode: true,
@@ -12,8 +11,6 @@ const nextConfig = {
 }
 
 const withNextra = nextra({
-  theme: 'nextra-theme-docs',
-  themeConfig: './theme.config.tsx',
   latex: true,
   defaultShowCopyCode: true,
 })
