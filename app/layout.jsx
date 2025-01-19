@@ -31,16 +31,7 @@ export default async function RootLayout({ children }) {
       // Suggested by `next-themes` package https://github.com/pacocoursey/next-themes#with-app
       suppressHydrationWarning
     >
-      <Head
-        // backgroundColor={{
-        //   dark: 'rgb(15, 23, 42)',
-        //   light: 'rgb(254, 252, 232)'
-        // }}
-        // color={{
-        //   hue: { dark: 120, light: 0 },
-        //   saturation: { dark: 100, light: 100 }
-        // }}
-      >
+      <Head>
         {/* Your additional tags should be passed as `children` of `<Head>` element */}
       </Head>
       <body>
@@ -49,12 +40,13 @@ export default async function RootLayout({ children }) {
           navbar={navbar}
           pageMap={await getPageMap()}
           docsRepositoryBase="https://github.com/kpietak/rust-course/tree/main"
-          editLink="Edit this page on GitHub"
+          editLink=""
           sidebar={{ defaultMenuCollapseLevel: 1 }}
           footer={footer}
           
           // ...Your additional theme config options
-          // feedback={{content: 'Zauważyłeś błąd, masz pomysł co poprawić - zgłoś propozycję!'}}
+          feedback={{content: 'Zauważyłeś błąd, masz pomysł co poprawić - zgłoś propozycję!'}}
+
         >
           {children}
         </Layout>
