@@ -9,11 +9,11 @@ export const metadata = {
   // https://nextjs.org/docs/app/building-your-application/optimizing/metadata
   title: {
     default: 'Programowanie w języku Rust',
-    template: '%s |pnp Nextra'
+    template: 'Programowanie w języku Rust | %s'
   },
 }
  
-const banner = <Banner storageKey="some-key">Nextra 4.0 is released 🎉</Banner>
+// const banner = <Banner storageKey="some-key">Nextra 4.0 is released 🎉</Banner>
 const navbar = <Navbar logo={<b>Programowanie w języku Rust</b>} projectLink="https://github.com/kpietak/rust-course" />
 const footer = (
   <Footer className="flex-col items-center md:items-start">
@@ -36,7 +36,7 @@ export default async function RootLayout({ children }) {
       </Head>
       <body>
         <Layout
-          banner={banner}
+          //banner={banner}
           navbar={navbar}
           pageMap={await getPageMap()}
           docsRepositoryBase="https://github.com/kpietak/rust-course/tree/main"
