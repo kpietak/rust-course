@@ -3,7 +3,7 @@ import {Callout} from 'nextra/components'
 # Przenoszenie własności wartości
 
 ## Move 
-1. Przepisz poniższy kod, w którym wartość zmiennej `s1` jest przypisywana do zmiennej `s2`. Zgodnie z powyższymi zasadą (o jednym właścicielu), wartość zostaje przeniesiona (ang. *move*), do zmiennej, która staje się jej właścicielem. Zmienna `s1` wychodzi poza zakres i nie może być wykorzystana poniżej linii 3.
+1. Przepisz poniższy kod, w którym wartość zmiennej `s1` jest przypisywana do zmiennej `s2`. Zgodnie z zasadą o jednym właścicielu, wartość zostaje "przeniesiona" (ang. *moved*), do zmiennej `s2`, która staje się jej nowym właścicielem. Zmienna `s1` wychodzi poza zakres i nie może być wykorzystana poniżej linii 3.
 
     ```rust showLineNumbers {3} copy
     fn main() {
@@ -39,7 +39,7 @@ import {Callout} from 'nextra/components'
         let s2 = s1.clone();
         
         println!("{}", s2);
-        println!("{}", s1); // we have two copies of "sample" text at heap
+        println!("{}", s1); // we have two copies of "sample" text at a heap
     }
     ```
 
