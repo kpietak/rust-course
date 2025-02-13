@@ -1,6 +1,6 @@
 {
   "name": "rust-course",
-  "version": "0.0.1",
+  "version": "2.0.0-beta",
   "description": "Introduction to programming in Rust",
   "scripts": {
     "dev": "next --turbopack",
