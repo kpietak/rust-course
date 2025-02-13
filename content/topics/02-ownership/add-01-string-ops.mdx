@@ -1,0 +1,118 @@
+import { Callout } from 'nextra/components'
+
+# Operacje na łańcuchach znaków
+
+Podstawowym (ale nie jedynym) typem opisującym łańuchy znaków jest typ `String` (dokumentacja typu `String` [tutaj](https://doc.rust-lang.org/std/string/struct.String.html)). Typ `String` jest dynamicznie rozszerzalnym, modyfikowalnym łańcuchem znaków, który jest przechowywany na stercie.
+
+Język Rust wprowadza literały tekstowe, które są typu `&str`. Literały tekstowe są niemutowalne, ale mogą zostać wykorzystane do stworzenia nowego łańcucha znaków typu `String`.
+
+### Tworzenie łańcuchów znakowych
+
+Utworzenie literału tekstowego:
+```rust
+let s : &str = "sample text";
+```
+
+Tworzenie nowego łańcucha znaków, na podstawie literału tekstowego:
+```rust
+let s = String::from("sample text");
+```
+
+Tworzenie pustego łańcucha znaków:
+```rust
+let mut s = String::new();
+// If you have an idea of how much data the String will hold, 
+// consider the with_capacity method to prevent excessive re-allocation.
+let mut s = String::with_capacity(10);
+```
+
+### Kodowanie UTF-8
+
+Wartości typu `String` reprezentują zawsze tekst w kodowaniu UTF-8, co upraszcza przetwarzanie tekstów w różnych językach oraz wykorzystanie znaków non-ASCII. 
+
+```rust
+let s = String::from("🍕🍍🍎");
+println!("{}", s);
+println!("{}", s.len());
+```
+
+Iterowanie po znakach w łańcuchu znaków:
+```rust
+let s = String::from("🍕🍍🍎"); 
+for c in s.chars() {
+    println!("{}", c);
+}
+```
+<Callout type="warning">
+Nie jest dozwolone adresowanie łańcuch znakowego po indeksie (`np. s[0]`), ponieważ znaki w UTF-8 mogą zajmować różną ilość bajtów.
+</Callout>
+
+
+```rust {4}
+fn main() {
+    let s = String::from("🍕🍍🍎");
+    for i in 0..s.len() {
+        println!("{}", s[i]);  // error
+    }
+}
+```
+
+### Porównywanie łańcuchów znaków
+
+Do sprawdzenia czy dwa łańcuchy są takie same można wykorzystać operatory porównania (`==`, `!=`).
+
+```rust
+fn main() {
+    let s = String::from("hello");
+    if s == "hello" {
+        println!("the same");
+    }
+}
+```
+
+<Callout type="info">
+Dla dociekliwych
+
+Dlaczego możemy porównać `String` z literałem tekstowym, który jest typu `&str`?
+
+Operator `==` jest tak naprawdę funkcją powiązaną z cechą `PartialEq` (o cechach dowiesz się później). Cecha ta może być zaimplementowana dla dowolnej pary typów i pozwala sprawdzić czy wartości tych typów są sobie równe. Dla wygody, typ `String` posiada implementację `PartialEq` między innymi dla  typu `&str` i vice versa.
+</Callout>
+
+
+### Wybrane modyfikacje łańcucha znaków
+
+Pamiętaj, że wszystkie metody, które zmieniają łańcuch znaków wymagają zmiennej mutowalnej oraz najczęściej mutowalnej pożyczki.
+
+Dodawanie tekstu do łańcucha znaków za pomocą metody `push_str`:
+```rust
+let mut s = String::new();
+s.push('a'); // append single character
+s.push_str("bc"); // append another string
+``` 
+
+Zmiana rozmiaru (ucinanie) łańcucha znaków za pomocą metody `truncate`:
+```rust     
+let mut s = String::from("sample text");
+s.truncate(6); // "sample"      
+```
+
+
+### Operacje na znakach
+
+Podobnie jak w przypadku łańcuchów znakowych, do porównywania pojedynczych znaków używamy standardowych operatorów porównania, w szczególności `==`, `!=`.
+
+Sprawdzenie czy znak jest cyfrą:
+```rust
+let c = '1';
+let is_digit = c.is_digit(10);
+```
+
+Konwersja znaku na cyfrę za pomocą metody `to_digit`:
+```rust
+let c = '1';
+let n = c.to_digit(10).unwrap();
+```
+
+O metodzie `unwrap` dowiesz się więcej w rozdziale dotyczącym obsługi błędów. Na razie przyjmij, że metoda `unwrap` zwraca wartość w przypadku sukcesu, a w przypadku błędu kończy program z komunikatem o błędzie.
+
+
