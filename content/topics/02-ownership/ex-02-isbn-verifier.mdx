@@ -2,9 +2,9 @@
 
 ## Format numerów ISBN
 
-Proces weryfikacji numerów ISBN-10 służy do sprawdzania numerów identyfikacyjnych książek. Zazwyczaj zawierają one myślniki i wyglądają następująco 3-598-21508-8
+Proces weryfikacji numerów ISBN-10 służy do sprawdzania numerów identyfikacyjnych książek. Zazwyczaj zawierają one myślniki i wyglądają następująco 3-598-21508-8.
 
-Format ISBN-10 to 9 cyfr (od 0 do 9) plus jeden znak kontrolny (cyfra lub znak X). W przypadku, gdy znakiem kontrolnym jest X, reprezentuje on wartość „10”. Numery ISBN-9 mogą być przekazywane z myślnikami lub bez nich, a ich poprawność można sprawdzić za pomocą następującego wzoru:
+Format ISBN-10 to 9 cyfr (od 0 do 9) plus jeden znak kontrolny (cyfra lub znak X). W przypadku, gdy znakiem kontrolnym jest X, reprezentuje on wartość „10”. Numery ISBN-10 mogą być przekazywane z myślnikami lub bez nich, a ich poprawność można sprawdzić za pomocą następującego wzoru:
 
 ```
 (d₁ * 10 + d₂ * 9 + d₃ * 8 + d₄ * 7 + d₅ * 6 + d₆ * 5 + d₇ * 4 + d₈ * 3 + d₉ * 2 + d₁₀ * 1) mod 11 == 0.
