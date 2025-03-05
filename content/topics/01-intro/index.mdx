@@ -42,10 +42,21 @@ Zanim przejdziemy do odkrywania tajników język Rust, zapoznajmy się z makrem 
     ```rust copy
     fn main() {
         let y = (1,2,3);
-        println!("The value of y is {:#?}.", y);
+        println!("The value of y is {:?}.", y);
     }
     ```
     
+1. Można również użyć bardziej przejrzystej formy, która wypisuje poszczególne wartości w osobnych liniach (`{:#?}`)
+
+    ```rust copy
+    fn main() {
+        let y = (1,2,3);
+        println!("The value of y is {:#?}.", y);
+    }
+    ```
+
     <Callout type="info">
-    Więcej na temat tych operatorów oraz sposobu definiowania wyświetlania własnych struktur dowiesz się później. Na razie mamy podstawę do poznawania podstawowych mechanizmów języka.
+    Więcej na temat tych operatorów oraz sposobu definiowania wyświetlania własnych struktur dowiesz się później. Na razie mamy podstawę do poznawania podstawowych mechanizmów języka. 
+    
+    Szczegółowe informacje na temat sposobu formatowania wartości znajdziesz w dokumentacji Rust: [std::fmt](https://doc.rust-lang.org/std/fmt/index.html).
     </Callout>
