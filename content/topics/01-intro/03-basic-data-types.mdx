@@ -13,7 +13,7 @@ Rust posiada mechanizm inferencji typów, który oznacza, że kompilator stara s
 
 1. Inferencja nie działa zawsze, np. w przypadku parsowania wartości konieczne jest podanie konkretnego typu:
 	```rust copy
-		let x: u32 = "432".parse().expect("Wrong number!");
+	let x: u32 = "432".parse().expect("Wrong number!");
 	```
 
 1. Spróbuj usunąć definicję typu i skompilować kod.
