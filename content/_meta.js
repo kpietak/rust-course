@@ -18,7 +18,7 @@ export default {
         href: "/topics/02-ownership"
       },
       "03-structures": {
-        title: "3. Struktury danych",
+        title: "3. Struktury danych i moduły",
         href: "/topics/03-structures"
       },
       "04-pattern-matching": {
