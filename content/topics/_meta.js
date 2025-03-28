@@ -8,7 +8,7 @@ export default {
         type: "page"
       },
       "03-structures": {
-        title: "Struktury danych",
+        title: "Struktury danych i moduły",
         type: "page"
       },
       "04-pattern-matching": {

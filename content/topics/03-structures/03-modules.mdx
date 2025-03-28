@@ -1,0 +1,213 @@
+import {Callout, FileTree} from 'nextra/components'
+
+# Moduły
+
+W języku Rust moduły służą do organizacji kodu w logiczne jednostki. Moduły pozwalają na grupowanie powiązanych funkcji, struktur, typów i stałych, co ułatwia zarządzanie kodem i jego ponowne wykorzystanie.
+
+Moduły możemy tworzyć w dowolnym miejscu w pliku źródłowym, ale zazwyczaj definiuje się je w osobnych plikach. Moduły mogą być zagnieżdżone, co pozwala na tworzenie hierarchii modułów.
+
+## Tworzenie i używanie modułów
+
+Dla zobrazowania działania modułów zdefiniujemy moduły w ramach jednego pliku. W dalszej części konspektu dowiesz się jak moduły mogą być zdefiniowane w osobnych plikach (co jest domyślnym sposobem wykorzystania modułów w większych projektach).
+
+1. Moduł tworzy się za pomocą słowa kluczowego `mod`:
+
+    ```rust
+    mod my_module {
+        pub fn my_function() {
+            println!("Hello from my_module!");
+        }
+
+        pub mod my_submodule {
+            pub fn my_subfunction() {
+                println!("Hello from my_submodule!");
+            }
+        }
+    }
+    ```
+1. Aby użyć funkcji zdefiniowanej w module, należy odwołać się do niej za pomocą ścieżki modułu. Na poniższym przykładzie podano ścieżkę względną (odwołując się z poziomu bieżącego modułu -- w naszym przypadku jest to moduł główny zdefiniowany implicite w pliku `main.rs`):
+
+    ```rust
+    fn main() {
+        my_module::my_function(); 
+        my_module::my_submodule::my_subfunction();
+    }
+    ```
+
+1. Do odwołania się do modułów można również wykorzystać ścieżki bezwzględne, zaczynając od głównego modułu projektu (ang. *root module*). W takiej sytuacji zaczynamy ścieżkę od słowa kluczowego `crate`:
+
+    ```rust
+    fn main() {
+        crate::my_module::my_function(); 
+        crate::my_module::my_submodule::my_subfunction();
+    }
+    ```
+
+1. Elementy modułów można również importować do przestrzeni nazw za pomocą słowa kluczowego `use`:
+
+    ```rust
+    use my_module::my_function;
+    use my_module::my_submodule::my_subfunction;
+
+    fn main() {
+        my_function(); 
+        my_subfunction();
+    }
+    ```
+
+## Reguły prywatności
+
+Domyślnie elementy takie jak funkcje, struktury i moduły są prywatne. Aby dany element stał się publiczny, musimy oznaczyć go słowem kluczowym `pub`.
+
+<Callout type="info">
+Reguły dotyczące widoczności elementów:
+1. Jeśli element jest publiczny, dostęp do niego można uzyskać przez dowolny jego moduł nadrzędny.
+1. Jeśli element jest prywatny, dostęp do niego można uzyskać tylko przez najbliższy moduł nadrzędny i dowolny moduł podrzędny tego modułu nadrzędnego.
+</Callout>
+
+Przeanalizuj poniższy kod i zidentyfikuj działanie powyższych reguł. Odpowiedz na pytania:
+
+1. Dlaczego modył `m2` nie musi być publiczny chociaż jest wykorzystywany w funkcji `m1_function`?
+1. Dlaczego funkcja `m2_function` musi być publiczna, aby mogła zostać wykorzystana przez funkcję `m1_function`?
+1. Czy funkcję `m2_function` można wywołać w funkcji `main`? Dlaczego?
+1. Dlaczego funkcja `m2_function` może wywołać funkcję `m0_function`?
+
+```rust
+mod m1 {
+    pub fn m1_function() {
+        println!("Hello from m1_function!");
+        m2::m2_function();
+    }
+    
+    mod m2 {
+        pub fn m2_function() {
+            println!("Hello from m2_function!");
+            crate::m0_function();
+        }
+    }
+}
+
+fn m0_function() {
+    println!("Hello from m0_function!");
+}
+
+fn main() {
+    m1::m1_function_a();
+    m1::m2::m2_function_a();
+}
+```
+<Callout emoji="✅" type="info">
+**Sprawdź się.** 
+
+Zanim skompilujesz poniższy kod, odpowiedz, które wiersze w funkcji `main` mają błędy i dlaczego. Następnie skompiluj kod i sprawdź swoje odpowiedzi. 
+</Callout>
+```rust
+mod outermost {
+    pub fn middle_function() {}
+
+    fn middle_secret_function() {}
+
+    mod inside {
+        pub fn inner_function() {}
+        fn inner_secret_function() {}
+    }
+}
+
+fn main() {
+    outermost::middle_function();
+    outermost::middle_secret_function(); 
+    outermost::inside::inner_function();
+    outermost::inside::inner_secret_function(); 
+}
+```
+
+
+## Moduły w osobnych plikach
+
+Rozważmy przykładową hierarchię modułów dla aplikacji umożliwiającej tworzenie i przeprowadzanie quizów (a'la Kahoot). W takim przypadku hierarchia modułów może wyglądać następująco:
+
+```
+- models
+  - user
+    - participant
+    - owner
+  - quiz
+- services
+  - auth
+  - quiz
+  - dashboard
+```
+
+Rust umożliwia tworzenie modułów w osobnych plikach. Poniżej znajduje się lista plików źródłowych w języku Rust, które odpowiadają podanej hierarchii modułów. Każdy moduł jest reprezentowany przez katalog lub plik zgodnie z systemem modułów w Rust.
+
+Struktura plików w projekcie powinna wyglądać następująco:
+
+<FileTree>
+  <FileTree.Folder name="src" defaultOpen>
+    <FileTree.File name="main.rs" />
+    <FileTree.Folder name="models" defaultOpen>
+        <FileTree.File name="mod.rs" />
+        <FileTree.Folder name="user" defaultOpen>
+        <FileTree.File name="mod.rs" />
+        <FileTree.File name="participant.rs" />
+        <FileTree.File name="owner.rs" />
+        </FileTree.Folder>
+        <FileTree.File name="quiz.rs" />
+    </FileTree.Folder>
+    <FileTree.Folder name="services" defaultOpen>
+        <FileTree.File name="mod.rs" />
+        <FileTree.File name="auth.rs" />
+        <FileTree.File name="quiz.rs" />
+        <FileTree.File name="dashboard.rs" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+  <FileTree.File name="Cargo.toml" />
+</FileTree>
+
+**Wyjaśnienie struktury katalogów**
+
+1. **`src/main.rs`**: Główny plik projektu, który pełni rolę punktu wejścia aplikacji. W przypadku bibliotek, głównym plikiem jest plik `lib.rs`.
+2. **`src/models/`**: Katalog zawierający moduły związane z modelami danych - nazwa katalogu określa nazwę modułu.
+   - **`mod.rs`**: Plik definiujący moduł `models` i deklarujący jego podmoduły. Nazwa pliku jest zarezerwowana dla modułu głównego w katalogu.
+   - **`user/`**: Podkatalog dla modułu `user`, który zawiera:
+     - **`mod.rs`**: Deklaruje podmoduły `participant` i `owner`.
+     - **`participant.rs`**: Plik zawierający definicję modułu `participant`.
+     - **`owner.rs`**: Plik zawierający definicję modułu `owner`.
+   - **`quiz.rs`**: Plik zawierający definicję modułu `quiz`.
+3. **`src/services/`**: Katalog zawierający moduły związane z logiką aplikacji (np. usługi).
+   - **`mod.rs`**: Plik definiujący moduł `services` i deklarujący jego podmoduły.
+   - **`auth.rs`**: Plik zawierający definicję modułu `auth`.
+   - **`quiz.rs`**: Plik zawierający definicję modułu `quiz`.
+   - **`dashboard.rs`**: Plik zawierający definicję modułu `dashboard`.
+4. **`Cargo.toml`**: Plik konfiguracyjny projektu Rust, zawierający informacje o zależnościach, metadanych projektu i ustawieniach kompilacji.
+
+Moduły znajdujące się w osobnych plikach muszą być zadeklarowane w module nadrzędnym. Na przykład, w głównym module (plik `main.rs` lub `lib.rs`) musimy zadeklarować moduły `models` i `services`:
+
+```rust filename="main.rs"
+mod models;
+mod services;    
+
+fn main() {
+    models::user::participant::create_participant();
+    services::auth::login();
+}
+```
+
+Podobnie, w pliku `models/mod.rs` musimy zadeklarować moduły `user` i `quiz`:
+
+```rust filename="models/mod.rs"
+pub mod user;
+pub mod quiz;
+```   
+
+## Ćwiczenie
+
+1. Utwórz nowy projekt o nazwie `rust-quizzes` za pomocą Cargo:
+
+    ```bash
+    cargo new rust-quizzes
+    ```
+1. Odtwórz powyższą strukturę modułów z wykorzystaniem osobnych plików.
+1. Utwórz przykładowe metody wskazane w pliku `main.rs` i zaimplementuj je w odpowiednich plikach modułów.
+1. Uruchom program za pomocą komendy `cargo run` i sprawdź, czy wszystko działa poprawnie.
+

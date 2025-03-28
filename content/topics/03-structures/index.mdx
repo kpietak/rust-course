@@ -93,7 +93,7 @@ Jeśli natomist atrybut struktury jest referencją, to konieczne będzie określ
     println!("[{}, {}]", r4.x, r4.y);
     ```
 
-Mutowalność struktury (na poziomie tworzenia nowej instancji). Nie można ustawiać mutowalności pojedynczych pól struktury.
+Mutowalność struktury jest określana przez właściciela danej instancji i dotyczy całej instancji. Oznacza to, że nie można ustawiać mutowalności pojedynczych pól struktury. Co więcej, dana struktura w określonym kontekście może być mutowalna, a w innym nie (jeśli zmieni się właściciela z mutowalnego na niemutowalny).
 
 ## Metody
 
