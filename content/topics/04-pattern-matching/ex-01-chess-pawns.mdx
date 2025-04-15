@@ -1,0 +1,50 @@
+# Pionki szachowe
+
+Twoim zadaniem będzie zamodelowanie bierek szachowych wraz z ich ruchem. Poniżej znajdziesz kilka wskazówek, które pomogą Ci w tym zadaniu.    
+1. Zdefiniuj typ wyliczeniowy `Chessman`, który będzie reprezentował różne rodzaje bierek szachowych. Nazwy bierek: 
+    - `Pawn` - pionek
+    - `Knight` - skoczek
+    - `Bishop` - goniec
+    - `Rook`  - wieża
+    - `Queen` - królowa
+    - `King` - król
+2. Zdefiniuj strukturę `Position`, która będzie reprezentować położenie bierki na planszy szachowej. Możesz użyć następującego kodu jako punktu wyjścia:
+    ```rust
+    #[derive(Debug)]
+    struct Position {
+        x: u8,
+        y: u8,
+    }
+    ```   
+3. Rozszerz typ `Chessman` o atrybuty `position` oraz `color`. Atrybut `position` powinien być typu `Position`, a `color` powinien być typu wyliczeniowego i oznaczać dwa możliwe kolory: `White` i `Black`.
+4. Zdefiniuj metodę `move`, która będzie przyjmować nową pozycję i aktualizować położenie bierki na planszy o następującej sygnaturze: 
+    ```rust
+    impl Chessman {
+        fn move(&mut self, new_position: Position) -> bool {
+            todo!()
+        }
+    }
+    ```
+    Metoda powinna zmieniać położenie bierki na planszy tylko wtedy jeśli nowa pozycja jest poprawna dla danej bierki (względem jej aktualnej pozycji). Jeśli nowa pozycja jest błędna, metoda powinna zwrócić `false`, w przeciwnym razie `true`.
+
+    Opcjonalnie, uwzględnij możliwy kierunek poruszania się pionków (`Pawn`) w zależności od koloru. Pionki białe poruszają się w górę planszy, a czarne w dół.
+5. Napisz testy jednostkowe dla każdej bierki, które sprawdzą czy metoda `move` działa poprawnie. Możesz użyć następującego kodu jako punktu wyjścia:
+    ```rust
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+        
+        #[test]
+        fn test_pawn_move() {
+            let mut pawn = Chessman::Pawn { position: Position { x: 1, y: 2 }, color: Color::White };
+            assert_eq!(pawn.move(Position { x: 1, y: 3 }), true);
+            assert_eq!(pawn.move(Position { x: 1, y: 5 }), false);
+        }
+        
+        // Dodaj testy dla pozostałych bierek
+    }
+    ```
+
+
+
+
