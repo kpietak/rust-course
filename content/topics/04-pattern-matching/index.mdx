@@ -52,7 +52,22 @@ import { Callout } from "nextra/components"
     // in main function
     let key_pressed = KeyPressed('b');
     ```
-1. Typy wyliczeniowe można też komponować:
+1. Typ wyliczeniowy może posiadać również nazwane atrybuty, podobnie jak struktury. Dodaj do typu wyliczeniowego `UIEvent` nową wartość `MouseClicked`, która będzie przechowywać współrzędne kliknięcia:
+    ```rust
+    #[derive(Debug)]
+    enum UIEvent {
+        ButtonClicked,
+        Scroll,
+        KeyPressed(char),
+        MouseClicked { x: i32, y: i32 }
+    }
+    ```
+1. Utwórz zdarzenie nowego typu, a następnie wypisz je za pomocą metody `describe`:
+    ```rust
+    // in main function
+    let mouse_clicked = MouseClicked { x: 10, y: 20 };
+    ```
+1. Typy wyliczeniowe można też komponować. Rozszerz wartość `Scroll` o nową atrybut `Direction`, która będzie przechowywać kierunek przewijania:
     ```rust
     #[derive(Debug)]
     enum Direction {
@@ -64,7 +79,8 @@ import { Callout } from "nextra/components"
     enum UIEvent {
         ButtonClicked,
         Scroll(Direction),
-        KeyPressed(char)
+        KeyPressed(char),
+        MouseClicked { x: i32, y: i32 }
     }
     ```
 1. Przenieś funkcję `describe` do bloku `impl` - funkcja ta będzie metodą typu wyliczeniowego:
@@ -75,7 +91,7 @@ import { Callout } from "nextra/components"
         }
     }
     ```
-    <Callout type="warning" emoji={"🤔"}>
+    <Callout type="info" emoji={"🤔"}>
     Pytania:
     1. Gdzie (domyślnie) przechowywane są wartości typu wyliczeniowego?
     1. W jaki sposob w pamięci przechowywany jest typ wyliczeniowy?

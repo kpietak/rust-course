@@ -7,13 +7,15 @@ import {Callout} from 'nextra/components'
 1. Dopisz do enumeracji z poprzedniego ćwiczenia (typ `UIEvent`) funkcję obsługującą dane zdarzenia:
     ```rust
     fn call(event : UIEvent) {
+        use UIEvent::*;
         match event {
             ButtonClicked => println!("Button clicked"), // simple match
             Scroll(x) => println!("Scroll {:?}", x), // attribute extraction
             KeyPressed(ch) => { // whole block
                 let up_ch = ch.to_uppercase();
                 println!("Key pressed: {}", up_ch);
-            }
+            },
+            MouseClicked { x, y } => println!("Mouse clicked at ({}, {})", x, y), // attribute extraction
         }
     }
     fn main() {
