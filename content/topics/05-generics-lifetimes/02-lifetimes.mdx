@@ -5,15 +5,15 @@ import {Callout} from 'nextra/components'
 Pamiętasz wiszące referencje z  [drugiego rozdziału](/02-ownership/03-borrow/#praca-z-referencjami)? Poniżej znajdziesz podobny przykład, tym razem z wykorzystaniem bloku kodu:
 ```rust copy showLineNumbers {7}
 fn main() {
-    let ref;
+    let ref_x;
     {
         let x = 5;
-        let ref = &x;
+        ref_x = &x;
     }
-    println!("{}", ref);
+    println!("{}", ref_x);
 }
 ```
-W linii 7 następuje próba odwołania do wartości wskazywanej przez zmienną `ref`, wartość ta jednak jest już poza zakresem - została usunięta z pamięci.
+W linii 7 następuje próba odwołania do wartości wskazywanej przez zmienną `ref_x`, wartość ta jednak jest już poza zakresem - została usunięta z pamięci.
 
 <Callout type="info">
 Kompilator Rusta kontroluje czy referencja zawsze wskazuje na wartość, która istnieje (nie jest poza zakresem).
