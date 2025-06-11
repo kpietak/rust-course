@@ -84,7 +84,7 @@
     ```
 1. Metoda `or_insert` zwraca mutowalną pożyczkę, a więc może być wykorzystana po lewej stronie przypisania, wtedy nasz kod wygląda jeszcze krócej:
     ```rust
-    map.entry(word.to_owned()).or_insert(0) += 1;
+    *map.entry(word.to_owned()).or_insert(0) += 1;
     ```
 1. Inna metoda `and_modify` pozwala z wykorzystaniem domknięć (o których będzie za chwilę) zdefiniować przepis na modyfikację elementu, zanim nastąpi ewentualne dodanie nowych wartości. Skutek wykonania poniższego kodu jest taki sam jak w poprzednim przykładzie:
     ```rust
