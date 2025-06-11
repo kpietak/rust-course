@@ -57,8 +57,8 @@ W przeciwieństwie do innych języków programowania, w Rust wyróżniamy 3 rodz
     ```rust
     let v = vec![1, 2, 3];
 
-    for e : &i32 in &v { // need to use reference (otherwise the v value is moved)
-        println!("{}", *e); // need to explicitly derefer the value
+    for e in &v { // need to use reference (otherwise the v value is moved) (e: &i32)
+        println!("{}", e); // an implicit dereference is performed here
     }
     ```
     Zwróć uwagę, że element, po którym iterujemy, jest referencją do elementy wektora. Aby wykorzystać jego wartość, należy wykorzystać operatora dereferencji `*`.
